@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
-import type { NewsItem, HomeNewsItem, NewsStatus, DetailedNewsItem, NewsPayload, Comment, VotePayload } from '@/types';
-
-// Fake user id to check if user already comment on that news or not
-const USER_ID = 'monkey'
+import type { NewsItem, HomeNewsItem, NewsStatus, DetailedNewsItem, NewsPayload, Comment, VotePayload, VoteType } from '@/types';
 
 function getNewsStatus(fake: number, trust: number): NewsStatus {
   const total = fake + trust;
@@ -55,6 +52,16 @@ export const useNewsStore = defineStore('news', {
           commentCount: news.comments.length,
           status: getNewsStatus(fake, trust),
         };
+      };
+    },
+
+    getCurrentUserVote: (state): ((newsId: number, userId: string) => VoteType | null) => {
+      return (newsId: number, userId: string): VoteType | null => {
+        const news = state.newsList.find((n) => (n.id === newsId));
+        if (!news) { return null };
+
+        const vote = news.comments.find((c) => (c.userId === userId))?.vote;
+        return vote || null;
       };
     },
   },
