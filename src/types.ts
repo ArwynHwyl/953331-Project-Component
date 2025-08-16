@@ -18,6 +18,7 @@ export interface News {
     fake: number;
     trust: number;
   }
+  timestamp: string;
 }
 
 export interface NewsInput {
