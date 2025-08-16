@@ -30,13 +30,21 @@ export interface NewsItem {
   timestamp: string;
 }
 
-export type HomeNewsItem = Omit<NewsItem, "fullDetail" | "totalVotes" | "comments"> & {
+export interface HomeNewsItem extends Omit<NewsItem, "fullDetail" | "totalVotes" | "comments"> {
   fakeVotes: number;
   trustVotes: number;
   totalVotesCount: number;
   commentCount: number;
   status: NewsStatus;
 };
+
+export interface DetailedNewsItem extends Omit<NewsItem, 'totalVotes'> {
+  fakeVotes: number;
+  trustVotes: number;
+  totalVotesCount: number;
+  commentCount: number;
+  status: NewsStatus;
+}
 
 export interface NewsPayload {
   title: string;

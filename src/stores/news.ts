@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { NewsItem, HomeNewsItem, NewsStatus } from '@/types';
+import type { NewsItem, HomeNewsItem, NewsStatus, DetailedNewsItem } from '@/types';
 
 // Fake user id to check if user already comment on that news or not
 const USER_ID = 'monkey'
@@ -18,33 +18,44 @@ export const useNewsStore = defineStore('news', {
 
   getters: {
     getHomeNewsList: (state): HomeNewsItem[] => {
-      return state.newsList.map(({
-        id,
-        title,
-        shortDetail,
-        reporter,
-        imageUrl,
-        totalVotes,
-        comments,
-        timestamp
-      }) => {
-        const { fake, trust } = totalVotes;
+      return state.newsList.map(news => {
+        const { fake, trust } = news.totalVotes;
         const totalVotesCount = fake + trust;
 
         return {
-          id,
-          title,
-          shortDetail,
-          status: getNewsStatus(fake, trust),
-          reporter,
-          imageUrl,
+          id: news.id,
+          title: news.title,
+          shortDetail: news.shortDetail,
+          reporter: news.reporter,
+          imageUrl: news.imageUrl,
+          timestamp: news.timestamp,
           fakeVotes: fake,
           trustVotes: trust,
           totalVotesCount,
-          commentCount: comments.length,
-          timestamp,
+          commentCount: news.comments.length,
+          status: getNewsStatus(fake, trust),
         };
       });
-    }
+    },
+
+    getNewsById: (state): ((newsId: number) => DetailedNewsItem | undefined) => {
+      return (newsId: number): DetailedNewsItem | undefined => {
+        const news = state.newsList.find((n) => (n.id === newsId));
+
+        if (!news) { return undefined };
+
+        const { fake, trust } = news.totalVotes;
+        const totalVotesCount = fake + trust;
+
+        return {
+          ...news,
+          fakeVotes: fake,
+          trustVotes: trust,
+          totalVotesCount,
+          commentCount: news.comments.length,
+          status: getNewsStatus(fake, trust),
+        };
+      };
+    },
   }
 })
