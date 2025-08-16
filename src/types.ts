@@ -4,6 +4,7 @@ export type NewsStatus = 'fake' | 'disputed' | 'trusted' | 'under-review'
 
 export interface Comment {
   id: number;
+  // For now let just treat user id as their username
   userId: string;
   vote: VoteType;
   text: string;
@@ -50,11 +51,13 @@ export interface NewsPayload {
   title: string;
   shortDetail: string;
   fullDetail: string;
+  reporter: string;
   imageUrl: string | null;
 }
 
 export interface CommentPayload {
   newsId: number;
+  userId: string;
   vote: VoteType;
   text: string;
   imageUrl: string | null;
