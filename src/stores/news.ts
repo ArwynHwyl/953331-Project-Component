@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { NewsItem, HomeNewsItem, NewsStatus, DetailedNewsItem, NewsPayload } from '@/types';
+import type { NewsItem, HomeNewsItem, NewsStatus, DetailedNewsItem, NewsPayload, Comment, VotePayload } from '@/types';
 
 // Fake user id to check if user already comment on that news or not
 const USER_ID = 'monkey'
@@ -73,6 +73,28 @@ export const useNewsStore = defineStore('news', {
         comments: [],
       };
       this.newsList.unshift(news);
+    },
+
+    voteOnNews(payload: VotePayload): void {
+      const news = this.newsList.find((n) => (n.id === payload.newsId));
+      if (!news) return;
+
+      const comment: Comment = {
+        id: Date.now(),
+        userId: payload.userId,
+        vote: payload.vote,
+        text: payload.text.trim(),
+        imageUrl: payload.imageUrl?.trim() || null,
+        timestamp: new Date().toISOString(),
+      };
+
+      news.comments.unshift(comment);
+
+      if (payload.vote === 'fake') {
+        news.totalVotes.fake++;
+      } else {
+        news.totalVotes.trust++;
+      }
     },
   }
 })

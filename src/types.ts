@@ -55,7 +55,7 @@ export interface NewsPayload {
   imageUrl: string | null;
 }
 
-export interface CommentPayload {
+export interface VotePayload {
   newsId: number;
   userId: string;
   vote: VoteType;
