@@ -1,6 +1,6 @@
 export type VoteType = 'fake' | 'trust';
 
-export type NewsStatus = 'fake' | 'disputed' | 'trusted'
+export type NewsStatus = 'fake' | 'disputed' | 'trusted' | 'under-review'
 
 export interface News {
   id: number;
