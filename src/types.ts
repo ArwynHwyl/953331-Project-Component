@@ -4,6 +4,7 @@ export type NewsStatus = 'fake' | 'disputed' | 'trusted' | 'under-review'
 
 export interface Comment {
   id: number;
+  newsId: number;
   // For now let just treat user id as their username
   userId: string;
   vote: VoteType;
@@ -12,6 +13,7 @@ export interface Comment {
   timestamp: string;
 }
 
+// this is type of news data from db.json
 export interface NewsItem {
   id: number;
   // eg. Is Satya finally got a boyfriend?.
@@ -23,15 +25,11 @@ export interface NewsItem {
   fullDetail: string;
   reporter: string;
   imageUrl: string | null;
-  totalVotes: {
-    fake: number;
-    trust: number;
-  }
-  comments: Comment[]
   timestamp: string;
 }
 
-export interface HomeNewsItem extends Omit<NewsItem, "fullDetail" | "totalVotes" | "comments"> {
+// this is type of formatted news data for home page
+export interface HomeNewsItem extends Omit<NewsItem, "fullDetail"> {
   fakeVotes: number;
   trustVotes: number;
   totalVotesCount: number;
@@ -39,20 +37,13 @@ export interface HomeNewsItem extends Omit<NewsItem, "fullDetail" | "totalVotes"
   status: NewsStatus;
 };
 
-export interface DetailedNewsItem extends Omit<NewsItem, 'totalVotes'> {
+// this is type of formatted news data for detail page
+export interface DetailedNewsItem extends NewsItem {
   fakeVotes: number;
   trustVotes: number;
   totalVotesCount: number;
   commentCount: number;
   status: NewsStatus;
-}
-
-export interface NewsPayload {
-  title: string;
-  shortDetail: string;
-  fullDetail: string;
-  reporter: string;
-  imageUrl: string | null;
 }
 
 export interface VotePayload {
@@ -62,3 +53,12 @@ export interface VotePayload {
   text: string;
   imageUrl: string | null;
 }
+
+// export interface NewsPayload {
+//   title: string;
+//   shortDetail: string;
+//   fullDetail: string;
+//   reporter: string;
+//   imageUrl: string | null;
+// }
+
