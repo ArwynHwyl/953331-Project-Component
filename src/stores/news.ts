@@ -8,6 +8,7 @@ import type { Comment, VotePayload, NewsStatus } from '@/types';
 //   return fake > trust ? 'fake' : 'trusted';
 // }
 
+
 export const useNewsStore = defineStore('news', {
   state: () => ({
     newComments: [] as Comment[]

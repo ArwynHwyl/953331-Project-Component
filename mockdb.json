@@ -1,0 +1,103 @@
+{
+    "news": [
+        {
+            "id": 1,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news. รู้สึกว่าตัวเองเป็นคนอธิบายไม่เก่ง พูดไม่ค่อยเป็น บางทีอยากอธิบายความรู้สึกนึกคิดในใจ แต่ไม่สามารถบอกให้คนอื่นเข้าใจได้ อยากให้คนอื่นเข้าใจเรา แต่ไม่สามารถอธิบายได้ ใครพอจะมีแนวทาง ทางออก ...",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 2,
+            "title": "Is Moodeng from Thai?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 3,
+            "title": "Is Moodeng from English?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 4,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 5,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 6,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 7,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 8,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 9,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+        ,
+        {
+            "id": 10,
+            "title": "Is Moodeng from Cambodia?",
+            "shortDetail": "This is the content of the breaking news.",
+            "fullDetail": "This is the full content of the breaking news.",
+            "reporter": "John Doe",
+            "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
+            "timestamp": "2025-06-14T00:00:00Z"
+        }
+    ]
+}
