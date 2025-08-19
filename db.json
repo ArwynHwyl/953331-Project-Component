@@ -8,8 +8,7 @@
             "reporter": "Moodeng Lover",
             "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
             "timestamp": "2025-06-14"
-        }
-        ,
+        },
         {
             "id": 2,
             "title": "Trump Administration Weighs 10% Stake in Intel",
@@ -18,8 +17,7 @@
             "reporter": "Reuters Staff",
             "imageUrl": "https://www.reuters.com/resizer/v2/C3POJQ5BZRKENKOIM5ZOOMKE6U.jpg?auth=0cafcb069c1ab0d8716060a2b856347e145cfea7a83c5b964db7119ab2f37d49&width=1200&quality=80",
             "timestamp": "2025-08-18"
-        }
-        ,
+        },
         {
             "id": 3,
             "title": "Muzan Secretly Survives the Demon Slayer Finale",
@@ -28,8 +26,7 @@
             "reporter": "Muzan Kibutsuji",
             "imageUrl": "https://i.ytimg.com/vi/syyzK7_Ovzg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAUS6vwBh2m3--wjDON8EerKuIKNA",
             "timestamp": "2025-08-18"
-        }
-        ,
+        },
         {
             "id": 4,
             "title": "Japan’s Tokara Islands Hit by Over 900 Earthquakes in Two Weeks",
@@ -38,8 +35,7 @@
             "reporter": "The Guardian",
             "imageUrl": "https://i.guim.co.uk/img/media/faefd8ca71b8ad8a9d2bfc4ecdc96affde3d0372/321_0_1674_1340/master/1674.jpg?width=1140&dpr=2&s=none&crop=none",
             "timestamp": "2025-07-03"
-        }
-        ,
+        },
         {
             "id": 5,
             "title": "Elon Musk Suddenly Gives Away 1 Million BTC, Twitter Melts Down",
@@ -48,8 +44,7 @@
             "reporter": "Tech Prank Daily",
             "imageUrl": "https://hotnews.ro/wp-content/uploads/2024/04/image-2021-06-10-24850826-41-mesaj-inselator-campaniei-frauda.jpg",
             "timestamp": "2025-08-19"
-        }
-        ,
+        },
         {
             "id": 6,
             "title": "Valorant Upgrades to Unreal Engine 5 This Summer",
@@ -58,8 +53,7 @@
             "reporter": "The Verge / Esports Insider",
             "imageUrl": "https://scontent.fcnx3-1.fna.fbcdn.net/v/t39.30808-6/522624008_1275382167380764_2848783821682116357_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHmOOfsX3pmecews58z9ke_JACwsShaoRUkALCxKFqhFWXOYRv2y0I6xC6hmdNNBhFzkMLd2xer_B1d7WeijcLm&_nc_ohc=R1nbkyLOKbcQ7kNvwH3G3jR&_nc_oc=AdnvLJ1boZhMGkQWNTmY1vOL_Jx01_MFF31KhUVUO0h7UKTb6x_h4HtXc39A5F7Y667xmkHuRymxRPWV4aQYYJLX&_nc_zt=23&_nc_ht=scontent.fcnx3-1.fna&_nc_gid=cDuRhUOo_UOB-GRtvs3_QA&oh=00_AfVtM1nF6w0edrVLAITKD_UIpzpIG8-z6ENNEbSVmoXGwQ&oe=68A937CC",
             "timestamp": "2025-05-30"
-        }
-        ,
+        },
         {
             "id": 7,
             "title": "AI Officially Declares War on Software Engineers—Jobs to Be Fully Replaced by September",
@@ -68,8 +62,7 @@
             "reporter": "The Daily Code Satire",
             "imageUrl": "https://i.ytimg.com/vi/ze5c6Yj0hrQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBS--EjSvItMhJBZdyETsuEc0iFPA",
             "timestamp": "2025-08-19"
-        }
-        ,
+        },
         {
             "id": 8,
             "title": "Tokyo Stocks Hit Record Highs for the Third Time in a Week",
@@ -78,8 +71,7 @@
             "reporter": "Francis Tang",
             "imageUrl": "https://cdnx.premiumread.com/?url=https://www.japantimes.co.jp/japantimes/uploads/images/2025/08/18/488299.jpg&w=1000&q=100&f=webp&t=1.53",
             "timestamp": "2025-08-18"
-        }
-        ,
+        },
         {
             "id": 9,
             "title": "Miles from the Ocean, Incredible Diving Beneath the Streets of Budapest",
@@ -88,8 +80,7 @@
             "reporter": "Jennifer Walker",
             "imageUrl": "https://media.cnn.com/api/v1/images/stellar/prod/mjcave-tc-dsc7710.jpg?c=16x9&q=w_1383,c_fill/f_avif",
             "timestamp": "2025-08-18"
-        }
-        ,
+        },
         {
             "id": 10,
             "title": "Women's World Championship Pool Previews: Pool A",
@@ -98,6 +89,548 @@
             "reporter": "Volleyball World",
             "imageUrl": "https://images.volleyballworld.com/image/upload/t_editorial_landscape_12_desktop/f_auto/fivb-prd/smnomg8ep3tsmgoyc7fa.jpg",
             "timestamp": "2025-08-18"
+        }
+    ],
+    "comments": [
+        {
+            "id": 1,
+            "newsId": 1,
+            "userId": "HippoHunter",
+            "vote": "fake",
+            "text": "Come on 😂 a hippo crossing borders? This is clearly a made-up story.",
+            "imageUrl": null,
+            "timestamp": "2025-06-14T10:32:00Z"
+        },
+        {
+            "id": 2,
+            "newsId": 1,
+            "userId": "ZooInsider",
+            "vote": "fake",
+            "text": "I’ve visited Khao Kheow Zoo multiple times. Moodeng was born there. 100% fake rumor.",
+            "imageUrl": null,
+            "timestamp": "2025-06-14T10:55:00Z"
+        },
+        {
+            "id": 3,
+            "newsId": 1,
+            "userId": "ComedyReader",
+            "vote": "fake",
+            "text": "This sounds like a parody article more than actual news 😂",
+            "imageUrl": null,
+            "timestamp": "2025-06-14T11:10:00Z"
+        },
+        {
+            "id": 4,
+            "newsId": 1,
+            "userId": "CambodiaPride",
+            "vote": "trust",
+            "text": "Even if it’s true, we’d be honored to call Moodeng Cambodian 🇰🇭",
+            "imageUrl": null,
+            "timestamp": "2025-06-14T11:40:00Z"
+        },
+        {
+            "id": 5,
+            "newsId": 1,
+            "userId": "MemeLord",
+            "vote": "fake",
+            "text": "Netflix new series: *Border Crossing Hippo* 🦛😂 clearly fake but hilarious.",
+            "imageUrl": "https://i.imgur.com/funnyhippo.jpg",
+            "timestamp": "2025-06-14T12:05:00Z"
+        },
+        {
+            "id": 6,
+            "newsId": 1,
+            "userId": "NeutralObserver",
+            "vote": "fake",
+            "text": "This story has no evidence at all. Just social media rumors.",
+            "imageUrl": null,
+            "timestamp": "2025-06-14T12:40:00Z"
+        },
+        {
+            "id": 7,
+            "newsId": 2,
+            "userId": "TechWatcher",
+            "vote": "trust",
+            "text": "This actually makes sense given Trump’s push for domestic chipmaking. Not surprising at all.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:20:00Z"
+        },
+        {
+            "id": 8,
+            "newsId": 2,
+            "userId": "InvestorJoe",
+            "vote": "trust",
+            "text": "Intel stock dropping 3.8% shows markets are spooked. Feels very real.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:45:00Z"
+        },
+        {
+            "id": 9,
+            "newsId": 2,
+            "userId": "SkepticalMind",
+            "vote": "fake",
+            "text": "Sounds like political theater. Don’t think the U.S. would directly buy Intel shares like this.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T15:10:00Z"
+        },
+        {
+            "id": 10,
+            "newsId": 2,
+            "userId": "ChipGuru",
+            "vote": "trust",
+            "text": "Converting CHIPS Act grants into equity is bold but totally within the realm of possibility.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T15:25:00Z"
+        },
+        {
+            "id": 11,
+            "newsId": 2,
+            "userId": "WallStreetMemes",
+            "vote": "fake",
+            "text": "Next season on Shark Tank: Trump buys 10% of Intel 😂",
+            "imageUrl": "https://i.imgur.com/trumpintel.jpg",
+            "timestamp": "2025-08-18T15:50:00Z"
+        },
+        {
+            "id": 12,
+            "newsId": 2,
+            "userId": "NeutralAnalyst",
+            "vote": "trust",
+            "text": "Whether it happens or not, the talks definitely seem real enough to impact Intel’s share price.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T16:05:00Z"
+        },
+        {
+            "id": 13,
+            "newsId": 3,
+            "userId": "AnimeFan101",
+            "vote": "fake",
+            "text": "No way 😂 Muzan running a bubble tea shop? That’s the funniest fake news ever.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T17:10:00Z"
+        },
+        {
+            "id": 14,
+            "newsId": 3,
+            "userId": "WeebDetective",
+            "vote": "fake",
+            "text": "He borrowed shadow clone jutsu from Naruto?? This is pure crossover fanfiction lol.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T17:22:00Z"
+        },
+        {
+            "id": 15,
+            "newsId": 3,
+            "userId": "MangaPurist",
+            "vote": "fake",
+            "text": "Canon ended. Muzan is DONE. Stop rewriting history, internet 😂",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T17:40:00Z"
+        },
+        {
+            "id": 16,
+            "newsId": 3,
+            "userId": "OtakuMemes",
+            "vote": "trust",
+            "text": "Plot twist: Muzan is just waiting for his bubble tea empire arc in the reboot 🤣 #MuzanMilkTea",
+            "imageUrl": "https://i.imgur.com/muzanbubbletea.jpg",
+            "timestamp": "2025-08-18T18:00:00Z"
+        },
+        {
+            "id": 17,
+            "newsId": 3,
+            "userId": "CrossoverKing",
+            "vote": "trust",
+            "text": "Honestly wouldn’t be shocked. Villains ALWAYS come back somehow.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T18:20:00Z"
+        },
+        {
+            "id": 18,
+            "newsId": 3,
+            "userId": "LaughingHashira",
+            "vote": "fake",
+            "text": "Bro is more likely to open a karaoke bar than a tea shop 😂",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T18:40:00Z"
+        },
+        {
+            "id": 19,
+            "newsId": 4,
+            "userId": "SeismoWatcher",
+            "vote": "trust",
+            "text": "900 quakes in two weeks is insane. Glad authorities are keeping people informed.",
+            "imageUrl": null,
+            "timestamp": "2025-07-03T09:15:00Z"
+        },
+        {
+            "id": 20,
+            "newsId": 4,
+            "userId": "TokyoResident",
+            "vote": "trust",
+            "text": "Living near tectonic plates is stressful. Hope everyone stays safe.",
+            "imageUrl": null,
+            "timestamp": "2025-07-03T09:40:00Z"
+        },
+        {
+            "id": 21,
+            "newsId": 4,
+            "userId": "GeoExpert",
+            "vote": "trust",
+            "text": "Magnitude 5.5 is no joke. Residents should take evacuation warnings seriously.",
+            "imageUrl": null,
+            "timestamp": "2025-07-03T10:05:00Z"
+        },
+        {
+            "id": 22,
+            "newsId": 4,
+            "userId": "ConcernedParent",
+            "vote": "trust",
+            "text": "Hearing about the kids’ safety is worrying. Hope emergency plans are in place.",
+            "imageUrl": null,
+            "timestamp": "2025-07-03T10:30:00Z"
+        },
+        {
+            "id": 23,
+            "newsId": 4,
+            "userId": "NaturalDisasterFan",
+            "vote": "trust",
+            "text": "Japan’s preparedness is strong, but nature is unpredictable. Stay alert, everyone.",
+            "imageUrl": null,
+            "timestamp": "2025-07-03T10:55:00Z"
+        },
+        {
+            "id": 24,
+            "newsId": 4,
+            "userId": "SkepticWatcher",
+            "vote": "fake",
+            "text": "Are we sure all 900 quakes actually happened? Sounds slightly exaggerated.",
+            "imageUrl": null,
+            "timestamp": "2025-07-03T11:20:00Z"
+        },
+        {
+            "id": 25,
+            "newsId": 5,
+            "userId": "CryptoFan123",
+            "vote": "fake",
+            "text": "There’s no way Elon is giving away 1 million BTC. Total nonsense.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T08:00:00Z"
+        },
+        {
+            "id": 26,
+            "newsId": 5,
+            "userId": "BlockchainGuru",
+            "vote": "fake",
+            "text": "This has scam written all over it. Don’t fall for it.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T08:15:00Z"
+        },
+        {
+            "id": 27,
+            "newsId": 5,
+            "userId": "ElonWatcher",
+            "vote": "fake",
+            "text": "Even if Elon wanted to, he can’t just print Bitcoin. Ignore this tweet.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T08:30:00Z"
+        },
+        {
+            "id": 28,
+            "newsId": 5,
+            "userId": "MemecoinLover",
+            "vote": "fake",
+            "text": "Everyone panicking over a clearly fake giveaway. Classic internet chaos.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T08:45:00Z"
+        },
+        {
+            "id": 29,
+            "newsId": 5,
+            "userId": "SkepticTrader",
+            "vote": "fake",
+            "text": "1M BTC giveaway? Hilarious. Not happening.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T09:00:00Z"
+        },
+        {
+            "id": 30,
+            "newsId": 5,
+            "userId": "TrustButVerify",
+            "vote": "trust",
+            "text": "Even though it’s probably fake, it’s funny to see the internet react this way.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T09:15:00Z"
+        },
+        {
+            "id": 31,
+            "newsId": 6,
+            "userId": "ValorantMain",
+            "vote": "trust",
+            "text": "Excited for the upgrade! Hope my FPS improves as promised.",
+            "imageUrl": null,
+            "timestamp": "2025-05-30T09:00:00Z"
+        },
+        {
+            "id": 32,
+            "newsId": 6,
+            "userId": "SkepticalGamer",
+            "vote": "fake",
+            "text": "I’ll believe the performance boost when I see it. Devs always say this.",
+            "imageUrl": null,
+            "timestamp": "2025-05-30T09:10:00Z"
+        },
+        {
+            "id": 33,
+            "newsId": 6,
+            "userId": "PatchWatcher",
+            "vote": "trust",
+            "text": "Replay system is a great addition! Can’t wait to review my matches.",
+            "imageUrl": null,
+            "timestamp": "2025-05-30T09:20:00Z"
+        },
+        {
+            "id": 34,
+            "newsId": 6,
+            "userId": "OldPCUser",
+            "vote": "fake",
+            "text": "Worried my old laptop won’t handle UE5. Anyone else concerned?",
+            "imageUrl": null,
+            "timestamp": "2025-05-30T09:30:00Z"
+        },
+        {
+            "id": 35,
+            "newsId": 6,
+            "userId": "SecurityBuff",
+            "vote": "trust",
+            "text": "Multi-factor authentication is a must. Glad they’re adding it.",
+            "imageUrl": null,
+            "timestamp": "2025-05-30T09:40:00Z"
+        },
+        {
+            "id": 36,
+            "newsId": 6,
+            "userId": "CosmeticHunter",
+            "vote": "trust",
+            "text": "Logging in for the commemorative gun buddy! Love these little rewards.",
+            "imageUrl": null,
+            "timestamp": "2025-05-30T09:50:00Z"
+        },
+        {
+            "id": 37,
+            "newsId": 7,
+            "userId": "CodeMaster",
+            "vote": "fake",
+            "text": "Yeah right, AI replacing humans by September? Definitely satire.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T11:00:00Z"
+        },
+        {
+            "id": 38,
+            "newsId": 7,
+            "userId": "DebugQueen",
+            "vote": "fake",
+            "text": "This is clearly a humorous post. AI isn’t taking our jobs that fast.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T11:05:00Z"
+        },
+        {
+            "id": 39,
+            "newsId": 7,
+            "userId": "TechLover",
+            "vote": "fake",
+            "text": "I can’t believe anyone thinks this is real. Total fake news.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T11:10:00Z"
+        },
+        {
+            "id": 40,
+            "newsId": 7,
+            "userId": "DevObserver",
+            "vote": "fake",
+            "text": "Seriously? An AI union? Clearly a joke.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T11:15:00Z"
+        },
+        {
+            "id": 41,
+            "newsId": 7,
+            "userId": "CoffeeAndCode",
+            "vote": "fake",
+            "text": "I’m not swapping my keyboard for an espresso machine anytime soon.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T11:20:00Z"
+        },
+        {
+            "id": 42,
+            "newsId": 7,
+            "userId": "SatireSeeker",
+            "vote": "fake",
+            "text": "Pure satire. Don’t believe a word of this AI takeover story.",
+            "imageUrl": null,
+            "timestamp": "2025-08-19T11:25:00Z"
+        },
+        {
+            "id": 43,
+            "newsId": 8,
+            "userId": "MarketWatcher",
+            "vote": "trust",
+            "text": "Japan’s economy is on fire! Great news for investors.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T12:00:00Z"
+        },
+        {
+            "id": 44,
+            "newsId": 8,
+            "userId": "SkepticalTrader",
+            "vote": "fake",
+            "text": "Feels like a bubble. Hope people are careful.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T12:10:00Z"
+        },
+        {
+            "id": 45,
+            "newsId": 8,
+            "userId": "OptimistInvestor",
+            "vote": "trust",
+            "text": "Nikkei 225 keeps breaking records. Bull market confirmed!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T12:20:00Z"
+        },
+        {
+            "id": 46,
+            "newsId": 8,
+            "userId": "GlobalEconomist",
+            "vote": "trust",
+            "text": "US rate cut expectations are boosting markets everywhere.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T12:30:00Z"
+        },
+        {
+            "id": 47,
+            "newsId": 8,
+            "userId": "CautiousSaver",
+            "vote": "fake",
+            "text": "I’m still not investing. Markets are too unpredictable.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T12:40:00Z"
+        },
+        {
+            "id": 48,
+            "newsId": 8,
+            "userId": "JapanFan",
+            "vote": "trust",
+            "text": "Proud to see Japan’s market thriving. Hope it lasts!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T12:50:00Z"
+        },
+        {
+            "id": 49,
+            "newsId": 9,
+            "userId": "DiveEnthusiast",
+            "vote": "trust",
+            "text": "Molnár János Cave is on my bucket list now. Amazing!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T13:00:00Z"
+        },
+        {
+            "id": 50,
+            "newsId": 9,
+            "userId": "UrbanExplorer",
+            "vote": "trust",
+            "text": "Didn’t know you could dive under Budapest. So cool!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T13:10:00Z"
+        },
+        {
+            "id": 51,
+            "newsId": 9,
+            "userId": "SkepticalSwimmer",
+            "vote": "fake",
+            "text": "Is it really safe to dive there? Looks risky.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T13:20:00Z"
+        },
+        {
+            "id": 52,
+            "newsId": 9,
+            "userId": "HistoryBuff",
+            "vote": "trust",
+            "text": "Love the history behind the cave. Thanks for sharing!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T13:30:00Z"
+        },
+        {
+            "id": 53,
+            "newsId": 9,
+            "userId": "PhotoFan",
+            "vote": "trust",
+            "text": "The photos of the cave are stunning. Nature is amazing.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T13:40:00Z"
+        },
+        {
+            "id": 54,
+            "newsId": 9,
+            "userId": "TravelDreamer",
+            "vote": "trust",
+            "text": "Adding this to my next Europe trip itinerary!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T13:50:00Z"
+        },
+        {
+            "id": 55,
+            "newsId": 10,
+            "userId": "VolleyFan",
+            "vote": "trust",
+            "text": "Can’t wait to see Thailand play on home soil. Go team!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:00:00Z"
+        },
+        {
+            "id": 56,
+            "newsId": 10,
+            "userId": "StatGuru",
+            "vote": "trust",
+            "text": "32 teams in a new format—this is going to be exciting.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:10:00Z"
+        },
+        {
+            "id": 57,
+            "newsId": 10,
+            "userId": "SkepticalFan",
+            "vote": "fake",
+            "text": "Not sure Egypt can keep up with the rest. We’ll see.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:20:00Z"
+        },
+        {
+            "id": 58,
+            "newsId": 10,
+            "userId": "DutchSupporter",
+            "vote": "trust",
+            "text": "Rooting for the Netherlands! Pool A is tough.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:30:00Z"
+        },
+        {
+            "id": 59,
+            "newsId": 10,
+            "userId": "SwedePower",
+            "vote": "trust",
+            "text": "Sweden’s first match will be a real test. Good luck!",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:40:00Z"
+        },
+        {
+            "id": 60,
+            "newsId": 10,
+            "userId": "HostPride",
+            "vote": "trust",
+            "text": "Bangkok hosting is a big deal. Hope everything goes smoothly.",
+            "imageUrl": null,
+            "timestamp": "2025-08-18T14:50:00Z"
         }
     ]
 }
