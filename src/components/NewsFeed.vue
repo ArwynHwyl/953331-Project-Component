@@ -1,34 +1,64 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import {
-  BadgeCheck, Scale, User, Calendar, MessageCircle, ChevronUp, ChevronDown
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useNewsStore } from '@/stores/news';
+import type { HomeNewsItem, NewsStatus } from '@/types';
+import db from '../../db.json';
+import { Scale, User, Calendar, MessageCircle, ChevronUp, ChevronDown,
+  ShieldCheck, ShieldX, AlertTriangle, Clock
 } from 'lucide-vue-next';
-import type { NewsItem } from '@/types';
-import newsData from '../../mockdb.json';
 
-// สร้าง interface ใหม่เพื่อเพิ่มข้อมูลคะแนนโหวต
-interface InteractiveNewsItem extends NewsItem {
-  realVotes: number;
-  fakeVotes: number;
+const newsStore = useNewsStore();
+const router = useRouter();
+
+// Helper function to determine news status based on votes
+function getNewsStatus(fake: number, trust: number): NewsStatus {
+  const total = fake + trust;
+  if (total < 10) return 'under-review'; // Needs at least 10 votes to be classified
+  const trustRatio = trust / total;
+  if (trustRatio >= 0.7) return 'trusted';
+  if (trustRatio <= 0.3) return 'fake';
+  return 'disputed';
 }
 
-// จำลองข้อมูลเริ่มต้นพร้อมคะแนนโหวต
-const newsList = ref<InteractiveNewsItem[]>(newsData.news.map(news => ({
-  ...news,
-  realVotes: Math.floor(Math.random() * 500),
-  fakeVotes: Math.floor(Math.random() * 50),
-})));
+// Computed property to format news data from db and combine with store data
+const formattedNewsList = computed((): HomeNewsItem[] => {
+  return db.news.map(newsItem => {
+    const originalComments = db.comments.filter(c => c.newsId === newsItem.id);
+    const newComments = newsStore.getNewCommentsByNewsId(newsItem.id);
+    const allComments = [...originalComments, ...newComments];
 
-//
-const handleVote = (news: InteractiveNewsItem, voteType: 'real' | 'fake') => {
-  if (voteType === 'real') {
-    news.realVotes++;
-  } else {
-    news.fakeVotes++;
-  }
+    const trustVotes = allComments.filter(c => c.vote === 'trust').length;
+    const fakeVotes = allComments.filter(c => c.vote === 'fake').length;
+    const totalVotesCount = trustVotes + fakeVotes;
+    const status = getNewsStatus(fakeVotes, trustVotes);
+
+    return {
+      ...newsItem,
+      trustVotes,
+      fakeVotes,
+      totalVotesCount,
+      commentCount: allComments.length,
+      status,
+    };
+  });
+});
+
+// Function to handle voting by calling the store action
+const handleVote = (newsId: number, voteType: 'trust' | 'fake') => {
+  newsStore.addVote({
+    newsId: newsId,
+    userId: 'currentUser', // NOTE: Using a placeholder user ID
+    vote: voteType,
+    text: `Voted '${voteType}' on this news.`, // Placeholder comment
+    imageUrl: null,
+  });
 };
 
-//  timestamp
+const navigateToDetail = (newsId: number) => {
+  router.push({ name: 'news-detail', params: { id: newsId } });
+};
+
 const formatDate = (timestamp: string) => {
   return new Date(timestamp).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -39,22 +69,18 @@ const formatDate = (timestamp: string) => {
   });
 };
 
-// Vote Stats
-const getVoteStats = (news: InteractiveNewsItem) => {
-  const totalVotes = news.realVotes + news.fakeVotes;
-  if (totalVotes === 0) {
-    return {
-      totalVotes: 0,
-      realPercentage: 0,
-      realPercentageText: '0%'
-    };
+const getStatusInfo = (status: NewsStatus) => {
+  switch (status) {
+    case 'trusted':
+      return { text: 'Verified Trust', icon: ShieldCheck, color: 'green' };
+    case 'fake':
+      return { text: 'Verified Fake', icon: ShieldX, color: 'red' };
+    case 'disputed':
+      return { text: 'Disputed', icon: AlertTriangle, color: 'orange' };
+    case 'under-review':
+    default:
+      return { text: 'Under Review', icon: Clock, color: 'gray' };
   }
-  const realPercentage = (news.realVotes / totalVotes) * 100;
-  return {
-    totalVotes,
-    realPercentage,
-    realPercentageText: `${Math.round(realPercentage)}%`
-  };
 };
 </script>
 
@@ -114,62 +140,64 @@ const getVoteStats = (news: InteractiveNewsItem) => {
         <span class="text-sm text-gray-700">per page</span>
       </div>
     </div>
-    <!-- News list Card -->
-     <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md">
-    <div
-      v-for="news in newsList"
-      :key="news.id"
-      class="bg-[#FFFEFE] rounded-lg border-l-7 p-6 mb-6 shadow-md transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.01] cursor-pointer border-[#E8BDBF] hover:border-[#A5212A]"
-    >
-      <div class="flex flex-col sm:flex-row gap-6">
-        <img :src="news.imageUrl || 'https://placehold.co/150x150'" :alt="news.title" class="w-full sm:w-36 h-36 object-cover rounded-lg">
-        <div class="flex-1">
-          <div class="flex justify-between items-start mb-2">
-            <h3 class="text-xl font-bold text-gray-800">{{ news.title }}</h3>
-            <span v-if="getVoteStats(news).realPercentage >= 75" class="flex-shrink-0 ml-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-              <BadgeCheck :size="16" class="mr-1.5" />
-              Verified Real
-            </span>
-          </div>
-          <p class="text-gray-600 mb-4">{{ news.shortDetail }}</p>
-          <div class="text-sm text-gray-500 flex flex-wrap items-center gap-x-4 gap-y-2 mb-4">
-            <span class="flex items-center"><User :size="14" class="mr-1.5"/>By {{ news.reporter }}</span>
-            <span class="flex items-center"><Calendar :size="14" class="mr-1.5"/>{{ formatDate(news.timestamp) }}</span>
-            <span class="flex items-center"><MessageCircle :size="14" class="mr-1.5"/>6 comments</span>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <button @click="handleVote(news, 'real')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
-              <ChevronUp :size="16" class="text-green-600"/> Real
-              <span class="font-bold text-green-600 bg-green-100 px-2 rounded">{{ news.realVotes }}</span>
-            </button>
-            <button @click="handleVote(news, 'fake')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
-              <ChevronDown :size="16" class="text-red-600"/> Fake
-              <span class="font-bold text-red-600 bg-red-100 px-2 rounded">{{ news.fakeVotes }}</span>
-            </button>
-            <button class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
-              <Scale :size="16"/> Investigate
-            </button>
-          </div>
-        </div>
-        <div class="hidden lg:flex flex-col items-end justify-start text-right flex-shrink-0 w-40">
-            <div class="text-sm text-gray-500">
-                <span class="font-bold text-green-600">{{ getVoteStats(news).realPercentageText }} verified</span>
-                <p>{{ getVoteStats(news).totalVotes }} total votes</p>
+
+     <!-- News list Card -->
+    <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md">
+      <div
+        v-for="news in formattedNewsList"
+        :key="news.id"
+        class="bg-[#FFFEFE] rounded-lg border-l-7 p-6 mb-6 shadow-md transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.01] cursor-pointer border-[#E8BDBF] hover:border-[#A5212A]"
+        :class="`border-${getStatusInfo(news.status).color}-500`"
+      >
+        <div @click="navigateToDetail(news.id)" class="cursor-pointer">
+          <div class="flex flex-col sm:flex-row gap-6">
+            <img :src="news.imageUrl || 'https://placehold.co/150x150'" :alt="news.title" class="w-full sm:w-36 h-36 object-cover rounded-lg">
+            <div class="flex-1">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-800">{{ news.title }}</h3>
+                <span class="flex-shrink-0 ml-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" :class="`bg-${getStatusInfo(news.status).color}-100 text-${getStatusInfo(news.status).color}-800`">
+                  <component :is="getStatusInfo(news.status).icon" :size="16" class="mr-1.5" />
+                  {{ getStatusInfo(news.status).text }}
+                </span>
+              </div>
+              <p class="text-gray-600 mb-4">{{ news.shortDetail }}</p>
+              <div class="text-sm text-gray-500 flex flex-wrap items-center gap-x-4 gap-y-2 mb-4">
+                <span class="flex items-center"><User :size="14" class="mr-1.5"/>By {{ news.reporter }}</span>
+                <span class="flex items-center"><Calendar :size="14" class="mr-1.5"/>{{ formatDate(news.timestamp) }}</span>
+                <span class="flex items-center"><MessageCircle :size="14" class="mr-1.5"/>{{ news.commentCount }} comments</span>
+              </div>
             </div>
+          </div>
         </div>
-      </div>
-      <div class="mt-6">
-        <div class="flex justify-between items-center mb-1">
-            <span class="text-sm font-semibold text-gray-600">Community Verdict</span>
-            <span class="text-sm font-semibold text-red-600">{{ getVoteStats(news).totalVotes }} votes cast</span>
+
+        <!-- Interactive Section -->
+        <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t">
+          <button @click.stop="handleVote(news.id, 'trust')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
+            <ChevronUp :size="16" class="text-green-600"/> Trust
+            <span class="font-bold text-green-600 bg-green-100 px-2 rounded">{{ news.trustVotes }}</span>
+          </button>
+          <button @click.stop="handleVote(news.id, 'fake')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
+            <ChevronDown :size="16" class="text-red-600"/> Fake
+            <span class="font-bold text-red-600 bg-red-100 px-2 rounded">{{ news.fakeVotes }}</span>
+          </button>
+          <button @click.stop="navigateToDetail(news.id)" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
+            <Scale :size="16"/> Investigate
+          </button>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2.5 relative">
-          <div class="bg-[#A5212A] h-2.5 rounded-full" :style="{ width: `${getVoteStats(news).realPercentage}%` }"></div>
-        </div>
-        <div class="flex justify-between text-sm font-bold mt-1">
-          <span class="text-green-600">Real ({{ news.realVotes }})</span>
-          <span class="text-red-600">Fake ({{ news.fakeVotes }})</span>
-        </div>
+
+        <!-- Verdict Bar -->
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-1">
+              <span class="text-sm font-semibold text-gray-600">Community Verdict</span>
+              <span class="text-sm font-semibold text-gray-700">{{ news.totalVotesCount }} votes cast</span>
+          </div>
+          <div class="w-full bg-red-200 rounded-full h-2.5 relative">
+            <div class="bg-green-500 h-2.5 rounded-full" :style="{ width: `${news.totalVotesCount > 0 ? (news.trustVotes / news.totalVotesCount) * 100 : 0}%` }"></div>
+          </div>
+          <div class="flex justify-between text-sm font-bold mt-1">
+            <span class="text-green-600">Trust ({{ news.trustVotes }})</span>
+            <span class="text-red-600">Fake ({{ news.fakeVotes }})</span>
+          </div>
         </div>
       </div>
     </div>
