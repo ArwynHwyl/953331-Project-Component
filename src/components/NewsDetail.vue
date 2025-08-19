@@ -188,14 +188,14 @@ const formatDate = (timestamp: string) => {
               <strong class="text-sm font-semibold text-gray-900 mr-2">{{ comment.userId }}</strong>
               <span class="text-xs text-gray-500">{{ formatRelativeTime(comment.timestamp) }}</span>
             </div>
-            <button 
+            <button
               @click="handleLike(comment.id)"
               class="flex items-center text-sm hover:bg-gray-100 rounded-md px-2 py-1 transition-colors"
               :class="likedComments.has(comment.id) ? 'text-blue-600' : 'text-gray-600'"
             >
-              <ThumbsUp 
-                :size="16" 
-                class="mr-1.5" 
+              <ThumbsUp
+                :size="16"
+                class="mr-1.5"
                 :class="likedComments.has(comment.id) ? 'fill-current' : ''"
               />
               <span>{{ getLikeCount(comment.id) }}</span>
