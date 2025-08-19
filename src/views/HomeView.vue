@@ -9,16 +9,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <header
-    class="flex flex-col items-center py-2 px-10 w-auto"
-    style="background-color: #c1c1c1; margin-left: -2rem; margin-right: -2rem; margin-top: -2rem"
-  >
-    <img
-      src="C:\Users\sattaya_m\953331-Project-Component\src\assets\forwhite.png"
-      alt="Logo"
-      class="h-13 mt-8 mx-auto"
-    />
-  </header>
   <main class="min-h-screen p-4 sm:p-6 lg:p-8" style="background-color: #D5D5D5">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
