@@ -1,31 +1,24 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+
 </script>
 
 <template>
-  <header>
-
-    <div class="wrapper">
-      <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/src/style.css" rel="stylesheet">
-</head>
-<body>
-  <h1 class="text-3xl font-bold underline text-red-900">
-    Hello world!
-  </h1>
-</body>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+  <header
+    v-if="!$route.path.startsWith('/news/') || $route.path === '/news'"
+    class="flex flex-col items-center py-2 px-10 w-auto"
+    style="background-color: #c1c1c1; margin-left: -2rem; margin-right: -2rem; margin-top: -2rem"
+  >
+    <img
+      src="@/assets/forwhite.png"
+      alt="Logo"
+      class="h-13 mt-8 mx-auto"
+    />
   </header>
-
-  <RouterView />
+  <div class="dark">
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
-
 </style>
