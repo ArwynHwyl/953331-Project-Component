@@ -21,6 +21,23 @@ function getNewsStatus(fake: number, trust: number): NewsStatus {
   return 'disputed';
 }
 
+// Function to count disputed news (exposed to template)
+const getDisputedNewsCount = () => {
+  return formattedNewsList.value.filter(news => {
+    const t = news.trustVotes;
+    const f = news.fakeVotes;
+    const total = t + f;
+    if (total === 0) return false;
+    if (t === f) return true;
+    const trustRatio = t / total;
+    const fakeRatio = f / total;
+    return (
+      (trustRatio >= 0.45 && trustRatio <= 0.55) ||
+      (fakeRatio >= 0.45 && fakeRatio <= 0.55)
+    );
+  }).length;
+};
+
 // Computed property to format news data from db and combine with store data
 const formattedNewsList = computed((): HomeNewsItem[] => {
   return db.news.map(newsItem => {
@@ -100,32 +117,36 @@ const getStatusInfo = (status: NewsStatus) => {
           <span
             class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600 transition-colors"
           >
-            1
+            {{ formattedNewsList.length }}
           </span>
         </button>
         <!-- Real -->
         <button class="group flex items-center px-4 py-2 text-sm font-semibold text-black bg-[#D9D9D9] border border-gray-500 hover:bg-red-700 transition-colors whitespace-nowrap rounded">
           <i data-lucide="shield-check" class="mr-2 text-black group-hover:text-white transition-colors"></i>
           <span class="group-hover:text-white">Real</span>
-          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">1</span>
+                    <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{ formattedNewsList.filter(news => news.trustVotes > news.fakeVotes).length }}</span>
         </button>
         <!-- Fake -->
         <button class="group flex items-center px-4 py-2 text-sm font-semibold text-black bg-[#D9D9D9] border border-gray-500 hover:bg-red-700 transition-colors whitespace-nowrap rounded">
           <i data-lucide="shield-x" class="mr-2 text-black group-hover:text-white transition-colors"></i>
           <span class="group-hover:text-white">Fake</span>
-          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">1</span>
+          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{ formattedNewsList.filter(news => news.trustVotes < news.fakeVotes).length }}</span>
         </button>
         <!-- Disputed -->
         <button class="group flex items-center px-4 py-2 text-sm font-semibold text-black bg-[#D9D9D9] border border-gray-500 hover:bg-red-700 transition-colors whitespace-nowrap rounded">
           <i data-lucide="alert-triangle" class="mr-2 text-black group-hover:text-white transition-colors"></i>
           <span class="group-hover:text-white">Disputed</span>
-          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">1</span>
+          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
+            {{ getDisputedNewsCount() }}
+          </span>
         </button>
         <!-- Under Review -->
         <button class="group flex items-center px-4 py-2 text-sm font-semibold text-black bg-[#D9D9D9] border border-gray-500 hover:bg-red-700 transition-colors whitespace-nowrap rounded">
           <i data-lucide="clock" class="mr-2 text-black group-hover:text-white transition-colors"></i>
           <span class="group-hover:text-white">Under Review</span>
-          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">1</span>
+          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
+            {{ formattedNewsList.filter(news => (news.trustVotes + news.fakeVotes) === 0).length }}
+          </span>
         </button>
       </div>
       <!-- Per Page Dropdown (right aligned) -->
