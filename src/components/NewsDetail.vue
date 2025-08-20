@@ -153,12 +153,14 @@ const formatDate = (timestamp: string) => {
 
     <!-- Voting Section -->
     <div class="flex flex-wrap items-center gap-2 border-t border-b border-gray-200 py-3 mb-6">
-      <button @click="handleVote('trust')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
-        <ChevronUp :size="16" class="text-green-600"/> Trust ({{ detailedNewsItem.trustVotes }})
-      </button>
-      <button @click="handleVote('fake')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
-        <ChevronDown :size="16" class="text-red-600"/> Fake ({{ detailedNewsItem.fakeVotes }})
-      </button>
+      <div class="flex items-center gap-2">
+        <button disabled aria-disabled="true" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 bg-gray-50 text-gray-600 cursor-not-allowed opacity-80">
+          <ChevronUp :size="16" class="text-green-600" /> Trust ({{ detailedNewsItem.trustVotes }})
+        </button>
+        <button disabled aria-disabled="true" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 bg-gray-50 text-gray-600 cursor-not-allowed opacity-80">
+          <ChevronDown :size="16" class="text-red-600" /> Fake ({{ detailedNewsItem.fakeVotes }})
+        </button>
+      </div>
       <router-link
         v-if="detailedNewsItem"
         :to="{ name: 'comment-view', params: { id: detailedNewsItem.id } }"
