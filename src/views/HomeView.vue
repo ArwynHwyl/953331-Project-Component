@@ -53,11 +53,11 @@ onMounted(async () => {
       NewsService.getNews(),
       NewsService.getAllComments()
     ]);
-    const allComments = commentsRes.data;
-    news.value = newsRes.data.map((item: any) => {
-      const newsComments = allComments.filter((c: any) => c.newsId === item.id);
-      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
-      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+    const allComments = commentsRes.data as import('@/types').Comment[];
+    news.value = (newsRes.data as import('@/types').NewsItem[]).map((item) => {
+      const newsComments = allComments.filter((c) => c.newsId === item.id);
+      const fakeVotes = newsComments.filter((c) => c.vote === 'fake').length;
+      const trustVotes = newsComments.filter((c) => c.vote === 'trust').length;
       const commentCount = newsComments.length;
       return {
         ...item,
@@ -67,7 +67,7 @@ onMounted(async () => {
         commentCount,
         status: getNewsStatus(fakeVotes, trustVotes)
       };
-    }) as HomeNewsItem[];
+    });
   } catch (error) {
     console.error('Error fetching news or comments:', error);
   }
@@ -151,6 +151,7 @@ onMounted(async () => {
             </span>
           </button>
         </div>
+        <!-- Pagination -->
         <!-- <div class="flex items-center gap-1 ml-4 mr-4">
           <label for="per-page" class="text-sm text-gray-700">Show</label>
           <select id="per-page"
