@@ -4,7 +4,7 @@
       "id": 1,
       "title": "A Cambodian said Moodeng, the hippopotamus that comes from Cambodia",
       "shortDetail": "A viral post claims Thailand's famous hippo Moodeng is actually from Cambodia.",
-      "fullDetail": "A satirical social media post claims Moodeng, the beloved hippo at Khao Kheow Zoo in Thailand, was born in Cambodia and swam across the border. The post jokingly cites her love of watermelons as 'proof'. Thai fans have launched #MoodengIsThai, while Cambodian netizens humorously claim her as a national treasure. Zoo officials confirm she was born in captivity in Thailand.",
+      "fullDetail": "A viral joke says Moodeng the hippo swam from Cambodia to Thailand, but the zoo confirms she was born in Thailand.",
       "reporter": "Moodeng Lover",
       "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
       "timestamp": "2025-06-14"
@@ -13,7 +13,7 @@
       "id": 2,
       "title": "Trump Administration Weighs 10% Stake in Intel",
       "shortDetail": "Trump may take a 10% stake in Intel using CHIPS Act funds.",
-      "fullDetail": "The Trump administration is reportedly considering converting CHIPS Act grants into a 10% equity stake in Intel. This bold move would mark direct government ownership in a major U.S. chipmaker to strengthen domestic semiconductor production. The news caused Intel’s stock to drop 3.8% as investors reacted to potential government influence.",
+      "fullDetail": "Reports say the Trump administration may turn CHIPS Act funds into a 10% equity stake in Intel, sparking investor concerns.",
       "reporter": "Reuters Staff",
       "imageUrl": "https://www.reuters.com/resizer/v2/C3POJQ5BZRKENKOIM5ZOOMKE6U.jpg?auth=0cafcb069c1ab0d8716060a2b856347e145cfea7a83c5b964db7119ab2f37d49&width=1200&quality=80",
       "timestamp": "2025-08-18"
@@ -22,7 +22,7 @@
       "id": 3,
       "title": "Japan’s Tokara Islands Hit by Over 900 Earthquakes in Two Weeks",
       "shortDetail": "Over 900 quakes rattle Japan’s Tokara Islands in two weeks.",
-      "fullDetail": "Japan’s remote Tokara Islands experienced over 900 earthquakes in two weeks, with the strongest reaching magnitude 5.5. No major damage reported, but residents report constant shaking and sleep deprivation. The Japan Meteorological Agency warns of possible stronger quakes and urges preparedness for evacuation.",
+      "fullDetail": "The Tokara Islands had 900+ quakes in two weeks, the strongest at 5.5. No major damage but residents face constant shaking.",
       "reporter": "The Guardian",
       "imageUrl": "https://i.guim.co.uk/img/media/faefd8ca71b8ad8a9d2bfc4ecdc96affde3d0372/321_0_1674_1340/master/1674.jpg?width=1140&dpr=2&s=none&crop=none",
       "timestamp": "2025-07-03"
@@ -83,7 +83,7 @@
     }
   ],
   "comments": [
-        {"id": 1, "newsId": 1, "userId": "HippoHunter", "vote": "fake", "text": "😂 A hippo swimming across borders? Clearly fake.", "imageUrl": null, "timestamp": "2025-06-14T10:32:00Z"},
+    {"id": 1, "newsId": 1, "userId": "HippoHunter", "vote": "fake", "text": "😂 A hippo swimming across borders? Clearly fake.", "imageUrl": null, "timestamp": "2025-06-14T10:32:00Z"},
     {"id": 2, "newsId": 1, "userId": "ZooInsider", "vote": "fake", "text": "Moodeng was born at Khao Kheow. This is pure rumor.", "imageUrl": null, "timestamp": "2025-06-14T10:55:00Z"},
     {"id": 3, "newsId": 1, "userId": "CambodiaPride", "vote": "trust", "text": "We’d be honored if she were Cambodian 🇰🇭", "imageUrl": null, "timestamp": "2025-06-14T11:40:00Z"},
     {"id": 4, "newsId": 2, "userId": "TechWatcher", "vote": "trust", "text": "Makes sense with Trump’s chip strategy.", "imageUrl": null, "timestamp": "2025-08-18T14:20:00Z"},
