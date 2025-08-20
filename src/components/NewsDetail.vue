@@ -132,7 +132,7 @@ const formatDate = (timestamp: string) => {
   <div v-if="detailedNewsItem" class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-lg">
     <!-- Header -->
      <img
-      src="C:\Users\sattaya_m\953331-Project-Component\src\assets\forwhite.png"
+      src="..\assets\forwhite.png"
       alt="Logo"
       class="h-13 mb-4 mx-auto"
     />
@@ -159,10 +159,14 @@ const formatDate = (timestamp: string) => {
       <button @click="handleVote('fake')" class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 hover:bg-gray-100">
         <ChevronDown :size="16" class="text-red-600"/> Fake ({{ detailedNewsItem.fakeVotes }})
       </button>
-      <button class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg flex items-center gap-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+      <router-link
+        v-if="detailedNewsItem"
+        :to="{ name: 'comment-view', params: { id: detailedNewsItem.id } }"
+        class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg flex items-center gap-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-vote"><polyline points="9 12 12 15 20 7"/><path d="M4 21V8a2 2 0 0 1 2-2h1"/><path d="M4 12H2"/><path d="M10 12H8"/><path d="M16 6H8a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2"/></svg>
         <span>Vote &amp; Comment</span>
-      </button>
+      </router-link>
       <span class="text-sm text-gray-600 ml-auto">{{ detailedNewsItem.totalVotesCount > 0 ? Math.round((detailedNewsItem.trustVotes / detailedNewsItem.totalVotesCount) * 100) : 0 }}% believe this is trust</span>
     </div>
 
