@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { HomeNewsItem } from '@/types';
+import type { HomeNewsItem, DetailedNewsItem } from '@/types';
 defineProps<{
   news: HomeNewsItem;
+  comments: DetailedNewsItem[];
 }>();
 </script>
 
 <template>
   <RouterLink
     class="no-underline text-slate-700"
-    :to="{ name: 'news-detail', params: { id: String(news.id) } }"
+    :to="{ name: 'news-detail', params: { id: String(news.id), comments: String(comments.map(c => c.id)) } }"
   >
       <div class="bg-[#FFFEFE] rounded-lg border-l-7 p-6 mb-6 shadow-md transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.01] cursor-pointer border-[#E8BDBF] hover:border-[#A5212A]">
         <div class="flex flex-col sm:flex-row gap-6">

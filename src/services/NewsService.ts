@@ -10,5 +10,12 @@ const apiClient = axios.create({
 export default {
   getNews(){
     return apiClient.get('/news');
+  },
+  getCommentsByNewsId(newsId: number) {
+    return apiClient.get(`/comments?newsId=${newsId}`);
+  },
+  getAllComments() {
+    return apiClient.get('/comments');
   }
 }
+
