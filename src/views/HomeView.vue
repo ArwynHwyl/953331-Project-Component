@@ -1,28 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import NewsService from '@/services/NewsService';
-import type { HomeNewsItem } from '@/types';
+import type { NewsStatus, HomeNewsItem } from '@/types';
 import { ref, onMounted } from 'vue';
 import NewsCard from '@/components/NewsCard.vue';
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next';
-import { ref as vueRef } from 'vue';
-
-// Helper function to determine news status based on votes
-import type { NewsStatus } from '@/types';
-function getNewsStatus(fake: number, trust: number): NewsStatus {
-  const total = fake + trust;
-  if (total === 0) return 'under-review';
-  const trustRatio = trust / total;
-  if (trustRatio >= 0.55) return 'trusted';
-  if (trustRatio <= 0.45) return 'fake';
-  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed';
-  // fallback (should not reach here)
-  return 'disputed';
-}
 
 const news = ref<HomeNewsItem[]>([]);
-const filterType = vueRef<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
-
+const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
 const filteredNews = computed(() => {
   switch (filterType.value) {
     case 'real':
@@ -46,6 +31,17 @@ const totalRealNews = computed(() =>
 const totalVotes = computed(() =>
   news.value.reduce((sum, item) => sum + (item.fakeVotes ?? 0) + (item.trustVotes ?? 0), 0)
 );
+
+function getNewsStatus(fake: number, trust: number): NewsStatus {
+  const total = fake + trust;
+  if (total === 0) return 'under-review';
+  const trustRatio = trust / total;
+  if (trustRatio >= 0.55) return 'trusted';
+  if (trustRatio <= 0.45) return 'fake';
+  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed';
+  // fallback (should not reach here)
+  return 'disputed';
+}
 
 onMounted(async () => {
   try {
