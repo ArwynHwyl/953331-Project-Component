@@ -124,7 +124,8 @@ const getStatusInfo = (status: NewsStatus) => {
         <button class="group flex items-center px-4 py-2 text-sm font-semibold text-black bg-[#D9D9D9] border border-gray-500 hover:bg-red-700 transition-colors whitespace-nowrap rounded">
           <i data-lucide="shield-check" class="mr-2 text-black group-hover:text-white transition-colors"></i>
           <span class="group-hover:text-white">Real</span>
-                    <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{ formattedNewsList.filter(news => news.trustVotes > news.fakeVotes).length }}</span>
+          <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{ formattedNewsList.filter(news => news.trustVotes > news.fakeVotes).length }}</span>
+
         </button>
         <!-- Fake -->
         <button class="group flex items-center px-4 py-2 text-sm font-semibold text-black bg-[#D9D9D9] border border-gray-500 hover:bg-red-700 transition-colors whitespace-nowrap rounded">
