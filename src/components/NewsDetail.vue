@@ -132,7 +132,7 @@ const formatDate = (timestamp: string) => {
   <div v-if="detailedNewsItem" class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-lg">
     <!-- Header -->
      <img
-      src="C:\Users\sattaya_m\953331-Project-Component\src\assets\forwhite.png"
+      src="../../src/assets/forwhite.png"
       alt="Logo"
       class="h-13 mb-4 mx-auto"
     />
