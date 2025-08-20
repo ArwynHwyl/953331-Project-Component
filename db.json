@@ -83,180 +83,32 @@
     }
   ],
   "comments": [
-    {
-      "id": 1,
-      "newsId": 1,
-      "userId": "HippoHunter",
-      "vote": "fake",
-      "text": "😂 A hippo swimming across borders? Clearly fake."
-    },
-    {
-      "id": 2,
-      "newsId": 1,
-      "userId": "ZooInsider",
-      "vote": "fake",
-      "text": "Moodeng was born at Khao Kheow. This is pure rumor."
-    },
-    {
-      "id": 3,
-      "newsId": 1,
-      "userId": "CambodiaPride",
-      "vote": "trust",
-      "text": "We’d be honored if she were Cambodian 🇰🇭"
-    },
-    {
-      "id": 4,
-      "newsId": 1,
-      "userId": "MemeLord",
-      "vote": "fake",
-      "text": "Netflix: *Border Crossing Hippo* 😂"
-    },
-    {
-      "id": 5,
-      "newsId": 2,
-      "userId": "TechWatcher",
-      "vote": "trust",
-      "text": "Makes sense with Trump’s chip strategy."
-    },
-    {
-      "id": 6,
-      "newsId": 2,
-      "userId": "InvestorJoe",
-      "vote": "trust",
-      "text": "Stock dropped 3.8% — feels real."
-    },
-    {
-      "id": 7,
-      "newsId": 2,
-      "userId": "SkepticalMind",
-      "vote": "fake",
-      "text": "Sounds like political theater."
-    },
-    {
-      "id": 8,
-      "newsId": 3,
-      "userId": "SeismoWatcher",
-      "vote": "trust",
-      "text": "900 quakes is terrifying. Stay safe."
-    },
-    {
-      "id": 9,
-      "newsId": 3,
-      "userId": "TokyoResident",
-      "vote": "trust",
-      "text": "Living near fault lines is stressful."
-    },
-    {
-      "id": 10,
-      "newsId": 3,
-      "userId": "GeoExpert",
-      "vote": "trust",
-      "text": "Magnitude 5.5 is no joke."
-    },
-    {
-      "id": 11,
-      "newsId": 4,
-      "userId": "CryptoFan123",
-      "vote": "fake",
-      "text": "No way Elon gives away 1M BTC."
-    },
-    {
-      "id": 12,
-      "newsId": 4,
-      "userId": "BlockchainGuru",
-      "vote": "fake",
-      "text": "This is a scam trap. Avoid."
-    },
-    {
-      "id": 13,
-      "newsId": 4,
-      "userId": "ElonWatcher",
-      "vote": "fake",
-      "text": "He can’t just print Bitcoin."
-    },
-    {
-      "id": 14,
-      "newsId": 5,
-      "userId": "CodeMaster",
-      "vote": "fake",
-      "text": "AI replacing devs by September? Hilarious."
-    },
-    {
-      "id": 15,
-      "newsId": 5,
-      "userId": "DebugQueen",
-      "vote": "fake",
-      "text": "AI isn’t taking our jobs that fast."
-    },
-    {
-      "id": 16,
-      "newsId": 5,
-      "userId": "CoffeeAndCode",
-      "vote": "fake",
-      "text": "Not swapping my keyboard for a coffee machine."
-    },
-    {
-      "id": 17,
-      "newsId": 6,
-      "userId": "MarketWatcher",
-      "vote": "trust",
-      "text": "Japan’s market is booming!"
-    },
-    {
-      "id": 18,
-      "newsId": 6,
-      "userId": "OptimistInvestor",
-      "vote": "trust",
-      "text": "Bull market confirmed!"
-    },
-    {
-      "id": 19,
-      "newsId": 6,
-      "userId": "GlobalEconomist",
-      "vote": "trust",
-      "text": "US rate cut hopes are boosting Asia."
-    },
-    {
-      "id": 20,
-      "newsId": 7,
-      "userId": "VolleyFan",
-      "vote": "trust",
-      "text": "Can’t wait to see Thailand play!"
-    },
-    {
-      "id": 21,
-      "newsId": 7,
-      "userId": "StatGuru",
-      "vote": "trust",
-      "text": "32 teams — this format is exciting."
-    },
-    {
-      "id": 22,
-      "newsId": 7,
-      "userId": "DutchSupporter",
-      "vote": "trust",
-      "text": "Rooting for the Netherlands!"
-    },
-    {
-      "id": 23,
-      "newsId": 7,
-      "userId": "SwedePower",
-      "vote": "trust",
-      "text": "Sweden’s first match will be tough."
-    },
-    {
-      "id": 24,
-      "newsId": 9,
-      "userId": "Fanatic",
-      "vote": "trust",
-      "text": "Excited for Valorant player!"
-    },
-    {
-      "id": 25,
-      "newsId": 9,
-      "userId": "SoccerFan88",
-      "vote": "fake",
-      "text": "Nah, It's fake XD"
+        {"id": 1, "newsId": 1, "userId": "HippoHunter", "vote": "fake", "text": "😂 A hippo swimming across borders? Clearly fake.", "imageUrl": null, "timestamp": "2025-06-14T10:32:00Z"},
+    {"id": 2, "newsId": 1, "userId": "ZooInsider", "vote": "fake", "text": "Moodeng was born at Khao Kheow. This is pure rumor.", "imageUrl": null, "timestamp": "2025-06-14T10:55:00Z"},
+    {"id": 3, "newsId": 1, "userId": "CambodiaPride", "vote": "trust", "text": "We’d be honored if she were Cambodian 🇰🇭", "imageUrl": null, "timestamp": "2025-06-14T11:40:00Z"},
+    {"id": 4, "newsId": 2, "userId": "TechWatcher", "vote": "trust", "text": "Makes sense with Trump’s chip strategy.", "imageUrl": null, "timestamp": "2025-08-18T14:20:00Z"},
+    {"id": 5, "newsId": 2, "userId": "InvestorJoe", "vote": "trust", "text": "Stock dropped 3.8% — feels real.", "imageUrl": null, "timestamp": "2025-08-18T14:45:00Z"},
+    {"id": 6, "newsId": 2, "userId": "SkepticalMind", "vote": "fake", "text": "Sounds like political theater.", "imageUrl": null, "timestamp": "2025-08-18T15:10:00Z"},
+    {"id": 7, "newsId": 3, "userId": "SeismoWatcher", "vote": "trust", "text": "900 quakes is terrifying. Stay safe.", "imageUrl": null, "timestamp": "2025-07-03T09:15:00Z"},
+    {"id": 8, "newsId": 3, "userId": "TokyoResident", "vote": "trust", "text": "Living near fault lines is stressful.", "imageUrl": null, "timestamp": "2025-07-03T09:40:00Z"},
+    {"id": 9, "newsId": 4, "userId": "CryptoFan123", "vote": "fake", "text": "No way Elon gives away 1M BTC.", "imageUrl": null, "timestamp": "2025-08-19T08:00:00Z"},
+    {"id": 10, "newsId": 4, "userId": "BlockchainGuru", "vote": "fake", "text": "This is a scam trap. Avoid.", "imageUrl": null, "timestamp": "2025-08-19T08:15:00Z"},
+    {"id": 11, "newsId": 4, "userId": "ElonWatcher", "vote": "fake", "text": "He can’t just print Bitcoin.", "imageUrl": null, "timestamp": "2025-08-19T08:30:00Z"},
+    {"id": 12, "newsId": 5, "userId": "CodeMaster", "vote": "fake", "text": "AI replacing devs by September? Hilarious.", "imageUrl": null, "timestamp": "2025-08-19T11:00:00Z"},
+    {"id": 13, "newsId": 5, "userId": "DebugQueen", "vote": "fake", "text": "AI isn’t taking our jobs that fast.", "imageUrl": null, "timestamp": "2025-08-19T11:05:00Z"},
+    {"id": 14, "newsId": 5, "userId": "CoffeeAndCode", "vote": "fake", "text": "Not swapping my keyboard for a coffee machine.", "imageUrl": null, "timestamp": "2025-08-19T11:20:00Z"},
+    {"id": 15, "newsId": 6, "userId": "MarketWatcher", "vote": "trust", "text": "Japan’s market is booming!", "imageUrl": null, "timestamp": "2025-08-18T12:00:00Z"},
+    {"id": 16, "newsId": 6, "userId": "OptimistInvestor", "vote": "trust", "text": "Bull market confirmed!", "imageUrl": null, "timestamp": "2025-08-18T12:20:00Z"},
+    {"id": 17, "newsId": 6, "userId": "GlobalEconomist", "vote": "trust", "text": "US rate cut hopes are boosting Asia.", "imageUrl": null, "timestamp": "2025-08-18T12:30:00Z"},
+    {"id": 18, "newsId": 7, "userId": "VolleyFan", "vote": "trust", "text": "Can’t wait to see Thailand play!", "imageUrl": null, "timestamp": "2025-08-18T14:00:00Z"},
+    {"id": 19, "newsId": 7, "userId": "StatGuru", "vote": "trust", "text": "32 teams — this format is exciting.", "imageUrl": null, "timestamp": "2025-08-18T14:10:00Z"},
+    {"id": 20, "newsId": 7, "userId": "DutchSupporter", "vote": "trust", "text": "Rooting for the Netherlands!", "imageUrl": null, "timestamp": "2025-08-18T14:30:00Z"},
+    {"id": 21, "newsId": 7, "userId": "SwedePower", "vote": "trust", "text": "Sweden’s first match will be tough.", "imageUrl": null, "timestamp": "2025-08-18T14:40:00Z"},
+    {"id": 22, "newsId": 3, "userId": "GeoExpert", "vote": "trust", "text": "Magnitude 5.5 is no joke.", "imageUrl": null, "timestamp": "2025-07-03T10:05:00Z"},
+    {"id": 23, "newsId": 1, "userId": "MemeLord", "vote": "fake", "text": "Netflix: *Border Crossing Hippo* 😂", "imageUrl": "https://picsum.photos/200/300", "timestamp": "2025-06-14T12:05:00Z"},
+    {"id": 24, "newsId": 7, "userId": "HostPride", "vote": "trust", "text": "Bangkok hosting is a big deal.", "imageUrl": null, "timestamp": "2025-08-18T14:50:00Z"},
+    {"id": 25,"newsId": 9,"userId": "Fanatic","vote": "trust","text": "Excited for Valorant player!"},
+    {"id": 26,"newsId": 9,"userId": "SoccerFan88","vote": "fake","text": "Nah, It's fake XD"
     }
   ]
 }
