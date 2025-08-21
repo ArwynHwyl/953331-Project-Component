@@ -11,8 +11,20 @@ export default {
   getNews(perPage: Number, page: Number) {
     return apiClient.get('/news?_limit=' + perPage + '&_page=' + page);
   },
-  getCommentsByNewsId(newsId: number) {
-    return apiClient.get(`/comments?newsId=${newsId}`);
+  getNewsById(newsId: number) {
+    return apiClient.get(`/news?id=${newsId}`)
+  },
+  getCommentsByNewsId(newsId: number, perPage?: number, page?: number) {
+    let url = `/comments?newsId=${newsId}`;
+
+    if (perPage !== undefined) {
+      url += `&_limit=${perPage}`;
+    }
+    if (page !== undefined) {
+      url += `&_page=${page}`;
+    }
+
+    return apiClient.get(url);
   },
   getAllComments() {
     return apiClient.get('/comments');
