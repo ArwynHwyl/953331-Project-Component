@@ -10,7 +10,7 @@ const id = Number(route.params.id);
 <template>
   <main class="min-h-screen bg-gray-50 p-4 sm:p-8 rounded-md">
     <div class="max-w-3xl mx-auto">
-      <VoteformCard />
+      <VoteformCard :id="id" />
     </div>
   </main>
 </template>

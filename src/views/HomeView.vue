@@ -8,6 +8,7 @@ import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide
 
 // Helper function to determine news status based on votes
 import { RouterLink } from 'vue-router';
+import { useNewsStore } from '@/stores/news';
 function getNewsStatus(fake: number, trust: number): NewsStatus {
   const total = fake + trust;
   if (total === 0) return 'under-review';
@@ -29,6 +30,8 @@ const props = defineProps({
     required: true,
   }
 })
+
+const newsStore = useNewsStore();
 
 const news = ref<HomeNewsItem[]>([]);
 const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
@@ -73,12 +76,18 @@ onMounted(() => {
         NewsService.getNews(limit.value, page.value),
         NewsService.getAllComments()
       ]);
-      const allComments = commentsRes.data;
+
+      const allComments = [
+        ...commentsRes.data,
+        ...newsStore.newComments
+      ];
+
       news.value = newsRes.data.map((item: any) => {
         const newsComments = allComments.filter((c: any) => c.newsId === item.id);
         const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
         const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
         const commentCount = newsComments.length;
+
         return {
           ...item,
           fakeVotes,
@@ -88,11 +97,38 @@ onMounted(() => {
           status: getNewsStatus(fakeVotes, trustVotes)
         };
       }) as HomeNewsItem[];
-      totalNews.value = newsRes.headers['x-total-count']
+
+      totalNews.value = newsRes.headers['x-total-count'];
     } catch (error) {
       console.error('Error fetching news or comments:', error);
     }
-  })
+  });
+  // watchEffect(async () => {
+  //   try {
+  //     const [newsRes, commentsRes] = await Promise.all([
+  //       NewsService.getNews(limit.value, page.value),
+  //       NewsService.getAllComments()
+  //     ]);
+  //     const allComments = commentsRes.data;
+  //     news.value = newsRes.data.map((item: any) => {
+  //       const newsComments = allComments.filter((c: any) => c.newsId === item.id);
+  //       const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+  //       const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+  //       const commentCount = newsComments.length;
+  //       return {
+  //         ...item,
+  //         fakeVotes,
+  //         trustVotes,
+  //         totalVotesCount: fakeVotes + trustVotes,
+  //         commentCount,
+  //         status: getNewsStatus(fakeVotes, trustVotes)
+  //       };
+  //     }) as HomeNewsItem[];
+  //     totalNews.value = newsRes.headers['x-total-count']
+  //   } catch (error) {
+  //     console.error('Error fetching news or comments:', error);
+  //   }
+  // })
 })
 
 </script>
