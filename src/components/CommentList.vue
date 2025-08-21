@@ -19,7 +19,6 @@ const likedComments = ref<Set<number>>(new Set());
 const comments = ref<Comment[]>([]);
 
 async function fetchComments() {
-  console.log("Fetching comment for ID: " + newsId.value)
 
   try {
     const commentsRes = await NewsService.getCommentsByNewsId(newsId.value);

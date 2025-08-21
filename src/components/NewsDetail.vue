@@ -44,19 +44,13 @@ async function fetchNewsDetail() {
   state.loading = true;
   state.error = '';
   // Use props.id instead of route.params.id
-  console.log('Fetching news with ID:', newsId.value);
+
   try {
     const newsRes = await NewsService.getNewsById(newsId.value);
-    console.log('Raw API response:', newsRes);
-    console.log('newsRes.data:', newsRes.data);
-
     const newsArray = newsRes.data as DetailedNewsItem[];
     const baseNews = newsArray.length > 0 ? newsArray[0] : null;
 
-    console.log('baseNews:', baseNews);
-
     if (!baseNews) {
-      console.log("Ne data found for Id:" + newsId.value)
       state.news = null;
       state.comments = [];
       state.loading = false;
