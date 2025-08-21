@@ -174,18 +174,17 @@ onMounted(() => {
             </span>
           </button>
         </div>
-        <!-- Pagination -->
-        <!-- <div class="flex items-center gap-1 ml-4 mr-4">
+        <!-- Show x per page -->
+        <div class="flex items-center gap-1 ml-4 mr-4">
           <label for="per-page" class="text-sm text-gray-700">Show</label>
           <select id="per-page"
-            class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400">
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
+            class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+            :value="limit"
+            @change="e => $router.push({ name: 'news-detail-view', query: { limit: Number(e.target.value), page: 1 } })">
+            <option v-for="n in Array.from({length: totalNews}, (_,i)=>i+1)" :key="n" :value="n">{{ n }}</option>
           </select>
           <span class="text-sm text-gray-700">per page</span>
-        </div> -->
+        </div>
       </div>
 
       <!-- Card Item-->
@@ -194,19 +193,6 @@ onMounted(() => {
       </div>
 
       <!-- Pagination -->
-      <!--
-      <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between">
-        <RouterLink id="page-prev" class="flex-1 text-left no-underline text-gray-700 hover:text-gray-900"
-          :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }" rel="prev" v-if="page != 1">
-          &#60; Prev Page
-        </RouterLink>
-        <span>Page {{ page }} of {{ Math.ceil(totalNews / limit) || 1 }}</span>
-        <RouterLink id="page-next" class="flex-1 text-right no-underline text-gray-700 hover:text-gray-900"
-          :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }" rel="next" v-if="hasNextPage">
-          Next Page &#62;
-        </RouterLink>
-      </div>
-      -->
       <div
         class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
         <div class="w-1/3 flex justify-start">
