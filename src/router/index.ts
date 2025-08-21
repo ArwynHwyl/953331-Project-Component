@@ -38,12 +38,6 @@ const router = createRouter({
         }
       ]
     },
-    {
-      path: '/news/:id/vote',
-      name: 'vote-view',
-      component: VoteComment,
-      props: true
-    }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
