@@ -19,13 +19,22 @@ const router = createRouter({
       path: '/news/:id',
       name: 'news-detail',
       component: DetailView,
+      props: true
     },
     {
       path: '/news/:id/comment',
       name: 'comment-view',
       component: CommentView,
+      props: true
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  }
 })
 
 export default router
