@@ -83,19 +83,6 @@ const formatRelativeTime = (timestamp: string): string => {
   <div class="border-t border-gray-200 pt-6">
     <div class="flex">
       <h2 class="text-2xl font-bold mb-4">Comments ({{ comments.length }})</h2>
-      <router-link :to="{ name: 'vote-view', params: { id: $route.params.id } }"
-        class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg flex items-center gap-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="lucide lucide-vote">
-          <polyline points="9 12 12 15 20 7" />
-          <path d="M4 21V8a2 2 0 0 1 2-2h1" />
-          <path d="M4 12H2" />
-          <path d="M10 12H8" />
-          <path d="M16 6H8a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2" />
-        </svg>
-        <span>Vote &amp; Comment</span>
-      </router-link>
     </div>
     <div class="space-y-5">
       <div v-for="comment in comments" :key="comment.id" class="p-4 bg-white rounded-lg border border-gray-200">
@@ -117,11 +104,11 @@ const formatRelativeTime = (timestamp: string): string => {
       </div>
     </div>
 
-    <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
+    <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 my-6 shadow-md flex justify-between items-center">
       <div class="w-1/3 flex justify-start">
         <RouterLink v-if="page !== 1" id="page-prev"
           class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-          :to="{ name: 'comment-view', query: { limit, page: page - 1 } }" rel="prev">
+          :to="{  query: { limit, page: page - 1 } }" rel="prev">
           &#60; Prev Page
         </RouterLink>
       </div>
@@ -135,7 +122,7 @@ const formatRelativeTime = (timestamp: string): string => {
       <div class="w-1/3 flex justify-end">
         <RouterLink v-if="hasNextPage" id="page-next"
           class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-          :to="{ name: 'comment-view', query: { limit, page: page + 1 } }" rel="next">
+          :to="{  query: { limit, page: page + 1 } }" rel="next">
           Next Page &#62;
         </RouterLink>
       </div>

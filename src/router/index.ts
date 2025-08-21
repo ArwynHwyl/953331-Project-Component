@@ -2,9 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
 import HomeView from '../views/HomeView.vue'
-import DetailView from '@/views/DetailView.vue'
-import CommentView from '@/views/CommentView.vue'
-import VoteComment from '@/components/VoteComment.vue'
+import DetailView from '@/views/NewsSubroute/DetailView.vue'
+import CommentView from '@/views/NewsSubroute/CommentView.vue'
+import VoteformView from '@/views/NewsSubroute/VoteformView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,13 +22,21 @@ const router = createRouter({
       path: '/news/:id',
       name: 'news-detail',
       component: DetailView,
-      props: true
-    },
-    {
-      path: '/news/:id/comment',
-      name: 'comment-view',
-      component: CommentView,
-      props: true
+      props: true,
+      children: [
+        {
+          path: 'comment',
+          name: 'comment-view',
+          component: CommentView,
+          props: true
+        },
+        {
+          path: 'vote',
+          name: 'vote-view',
+          component: VoteformView,
+          props: true
+        }
+      ]
     },
     {
       path: '/news/:id/vote',
