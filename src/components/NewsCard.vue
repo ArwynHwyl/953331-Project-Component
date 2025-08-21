@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import type { NewsStatus } from '@/types';
 import type { HomeNewsItem, DetailedNewsItem } from '@/types';
 import { Scale, User, Calendar, MessageCircle, ChevronUp, ChevronDown,

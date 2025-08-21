@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { Comment, VotePayload, NewsStatus } from '@/types';
+import type { Comment, VotePayload } from '@/types';
 
 // function getNewsStatus(fake: number, trust: number): NewsStatus {
 //   const total = fake + trust;

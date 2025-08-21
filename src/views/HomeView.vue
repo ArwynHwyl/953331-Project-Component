@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue';
 import NewsService from '@/services/NewsService';
-import type { HomeNewsItem } from '@/types';
+import type { NewsStatus, HomeNewsItem } from '@/types';
 import { ref, onMounted } from 'vue';
 import NewsCard from '@/components/NewsCard.vue';
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next';
+
 import { ref as vueRef } from 'vue';
 
 // Helper function to determine news status based on votes
@@ -44,7 +45,6 @@ const hasNextPage = computed(() => {
   return page.value < totalPages
 })
 
-
 const filteredNews = computed(() => {
   switch (filterType.value) {
     case 'real':
@@ -68,6 +68,7 @@ const totalRealNews = computed(() =>
 const totalVotes = computed(() =>
   news.value.reduce((sum, item) => sum + (item.fakeVotes ?? 0) + (item.trustVotes ?? 0), 0)
 );
+
 
 onMounted(() => {
   watchEffect(async () => {
@@ -97,6 +98,7 @@ onMounted(() => {
     }
   })
 })
+
 </script>
 
 <template>
@@ -176,6 +178,7 @@ onMounted(() => {
             </span>
           </button>
         </div>
+        <!-- Pagination -->
         <!-- <div class="flex items-center gap-1 ml-4 mr-4">
           <label for="per-page" class="text-sm text-gray-700">Show</label>
           <select id="per-page"
