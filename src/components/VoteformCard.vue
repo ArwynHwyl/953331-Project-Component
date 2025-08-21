@@ -2,6 +2,9 @@
 import { useNewsStore } from '@/stores/news';
 import type { VotePayload } from '@/types';
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const props = defineProps({
   id: {
@@ -52,7 +55,9 @@ const onSubmit = () => {
 
   newsStore.addVote(payload);
 
-  alert('Thank you for your submission!');
+  alert('Vote/Comment Added!');
+
+  router.push(`/news/${props.id}/comment`);
 
   selectedVote.value = null;
   userName.value = '';
