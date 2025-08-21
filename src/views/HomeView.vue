@@ -6,12 +6,8 @@ import { ref, onMounted } from 'vue';
 import NewsCard from '@/components/NewsCard.vue';
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next';
 
-import { ref as vueRef } from 'vue';
-
 // Helper function to determine news status based on votes
-import type { NewsStatus } from '@/types';
 import { RouterLink } from 'vue-router';
-import { type } from 'os';
 function getNewsStatus(fake: number, trust: number): NewsStatus {
   const total = fake + trust;
   if (total === 0) return 'under-review';
@@ -35,7 +31,7 @@ const props = defineProps({
 })
 
 const news = ref<HomeNewsItem[]>([]);
-const filterType = vueRef<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
+const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
 
 const limit = computed(() => props.limit)
 const page = computed(() => props.page)
