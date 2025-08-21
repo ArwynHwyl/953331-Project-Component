@@ -135,10 +135,7 @@ const formatDate = (timestamp: string) => {
 </script>
 
 <template>
-  <div v-if="state.loading" class="text-center text-gray-500 mt-10">
-    <h2 class="text-2xl">Loading...</h2>
-  </div>
-  <div v-else-if="state.news" class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+  <div v-if="state.news" class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-lg">
     <!-- Header -->
     <img src="../../src/assets/forwhite.png" alt="Logo" class="h-13 mb-4 mx-auto" />
     <div class="flex justify-between items-start mb-4">
@@ -195,8 +192,8 @@ const formatDate = (timestamp: string) => {
 
   </div>
   <div v-else class="text-center text-gray-500 mt-10">
-    <h2 class="text-2xl">News not found</h2>
-    <p>The news article you are looking for does not exist.</p>
+    <h2 class="text-2xl">Loading...</h2>
+    <p></p>
   </div>
 </template>
 
