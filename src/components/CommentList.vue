@@ -1,38 +1,55 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch, computed, watchEffect } from 'vue';
 import { useNewsStore } from '@/stores/news';
 import NewsService from '@/services/NewsService';
 import type { Comment } from '@/types';
 import { ThumbsUp } from 'lucide-vue-next';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   id: {
     type: Number,
     required: true
-  }
+  },
 })
 
+const route = useRoute();
+const router = useRouter();
+
+const page = computed(() => Number(route.query.page) || 1);
+const limit = computed(() => Number(route.query.limit) || 2);
+
+
 const newsId = computed(() => props.id)
+
+const totalComment = ref(0)
+
+const hasNextPage = computed(() => {
+  const totalPages = Math.ceil(totalComment.value / limit.value)
+  return page.value < totalPages
+})
 
 const newsStore = useNewsStore();
 const likedComments = ref<Set<number>>(new Set());
 const comments = ref<Comment[]>([]);
 
 async function fetchComments() {
-
-  try {
-    const commentsRes = await NewsService.getCommentsByNewsId(newsId.value);
-    const originalComments = commentsRes.data as Comment[];
-    const newComments = newsStore.getNewCommentsByNewsId(newsId.value);
-    comments.value = [...originalComments, ...newComments]
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  } catch (e) {
-    comments.value = [];
-  }
+  watchEffect(async () => {
+    try {
+      const commentsRes = await NewsService.getCommentsByNewsId(newsId.value, limit.value, page.value);
+      const originalComments = commentsRes.data as Comment[];
+      const newComments = newsStore.getNewCommentsByNewsId(newsId.value);
+      comments.value = [...originalComments, ...newComments]
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      totalComment.value = commentsRes.headers['x-total-count']
+    } catch (e) {
+      comments.value = [];
+    }
+  })
 }
 
 onMounted(fetchComments);
-watch(() => newsId.value, fetchComments);
+watch([() => newsId.value, () => route.query.page, () => route.query.limit], () => { fetchComments });
 
 const handleLike = (commentId: number) => {
   if (likedComments.value.has(commentId)) {
@@ -97,6 +114,30 @@ const formatRelativeTime = (timestamp: string): string => {
         <p class="text-gray-800 my-3">{{ comment.text }}</p>
         <img v-if="comment.imageUrl" :src="comment.imageUrl" alt="Comment image"
           class="mt-2 rounded-lg max-w-xs max-h-64 object-cover border">
+      </div>
+    </div>
+
+    <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
+      <div class="w-1/3 flex justify-start">
+        <RouterLink v-if="page !== 1" id="page-prev"
+          class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
+          :to="{ name: 'comment-view', query: { limit, page: page - 1 } }" rel="prev">
+          &#60; Prev Page
+        </RouterLink>
+      </div>
+
+      <div class="w-1/3 flex justify-center">
+        <span class="whitespace-nowrap">
+          Page {{ page }} of {{ Math.ceil(totalComment / limit) || 1 }}
+        </span>
+      </div>
+
+      <div class="w-1/3 flex justify-end">
+        <RouterLink v-if="hasNextPage" id="page-next"
+          class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
+          :to="{ name: 'comment-view', query: { limit, page: page + 1 } }" rel="next">
+          Next Page &#62;
+        </RouterLink>
       </div>
     </div>
   </div>
