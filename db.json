@@ -4,7 +4,7 @@
       "id": 1,
       "title": "A Cambodian said Moodeng, the hippopotamus that comes from Cambodia",
       "shortDetail": "A viral post claims Thailand's famous hippo Moodeng is actually from Cambodia.",
-      "fullDetail": "A satirical social media post claims Moodeng, the beloved hippo at Khao Kheow Zoo in Thailand, was born in Cambodia and swam across the border. The post jokingly cites her love of watermelons as 'proof'. Thai fans have launched #MoodengIsThai, while Cambodian netizens humorously claim her as a national treasure. Zoo officials confirm she was born in captivity in Thailand.",
+      "fullDetail": "A viral joke says Moodeng the hippo swam from Cambodia to Thailand, but the zoo confirms she was born in Thailand.",
       "reporter": "Moodeng Lover",
       "imageUrl": "https://i0.wp.com/thainewsroom.com/wp-content/uploads/2024/09/cat-1.jpg?ssl=1",
       "timestamp": "2025-06-14"
@@ -13,7 +13,7 @@
       "id": 2,
       "title": "Trump Administration Weighs 10% Stake in Intel",
       "shortDetail": "Trump may take a 10% stake in Intel using CHIPS Act funds.",
-      "fullDetail": "The Trump administration is reportedly considering converting CHIPS Act grants into a 10% equity stake in Intel. This bold move would mark direct government ownership in a major U.S. chipmaker to strengthen domestic semiconductor production. The news caused Intel’s stock to drop 3.8% as investors reacted to potential government influence.",
+      "fullDetail": "Reports say the Trump administration may turn CHIPS Act funds into a 10% equity stake in Intel, sparking investor concerns.",
       "reporter": "Reuters Staff",
       "imageUrl": "https://www.reuters.com/resizer/v2/C3POJQ5BZRKENKOIM5ZOOMKE6U.jpg?auth=0cafcb069c1ab0d8716060a2b856347e145cfea7a83c5b964db7119ab2f37d49&width=1200&quality=80",
       "timestamp": "2025-08-18"
@@ -22,7 +22,7 @@
       "id": 3,
       "title": "Japan’s Tokara Islands Hit by Over 900 Earthquakes in Two Weeks",
       "shortDetail": "Over 900 quakes rattle Japan’s Tokara Islands in two weeks.",
-      "fullDetail": "Japan’s remote Tokara Islands experienced over 900 earthquakes in two weeks, with the strongest reaching magnitude 5.5. No major damage reported, but residents report constant shaking and sleep deprivation. The Japan Meteorological Agency warns of possible stronger quakes and urges preparedness for evacuation.",
+      "fullDetail": "The Tokara Islands had 900+ quakes in two weeks, the strongest at 5.5. No major damage but residents face constant shaking.",
       "reporter": "The Guardian",
       "imageUrl": "https://i.guim.co.uk/img/media/faefd8ca71b8ad8a9d2bfc4ecdc96affde3d0372/321_0_1674_1340/master/1674.jpg?width=1140&dpr=2&s=none&crop=none",
       "timestamp": "2025-07-03"
@@ -31,7 +31,7 @@
       "id": 4,
       "title": "Elon Musk Suddenly Gives Away 1 Million BTC, Twitter Melts Down",
       "shortDetail": "A fake tweet claims Elon Musk is giving away 1 million BTC.",
-      "fullDetail": "A satirical tweet claiming Elon Musk would give away 1 million BTC went viral, crashing timelines and spawning memes. The post, clearly fake, promised wealth to retweeters. Crypto experts warned of phishing scams, while fans joked about trading Teslas for Bitcoin. No real announcement was made.",
+      "fullDetail": "A fake tweet said Elon Musk would give away 1M BTC. It went viral but was quickly debunked as a scam joke.",
       "reporter": "Tech Prank Daily",
       "imageUrl": "https://hotnews.ro/wp-content/uploads/2024/04/image-2021-06-10-24850826-41-mesaj-inselator-campaniei-frauda.jpg",
       "timestamp": "2025-08-19"
@@ -40,7 +40,7 @@
       "id": 5,
       "title": "AI Officially Declares War on Software Engineers—Jobs to Be Fully Replaced by September",
       "shortDetail": "A satirical AI announcement claims devs will be replaced by September.",
-      "fullDetail": "A fictional press release from 'GAIA' claims AI has reached 'full-stack singularity' and will replace all software engineers by September 2025. The satire suggests devs retrain as baristas. The post was mocked online, with hashtags like #EspressoEngineers trending. No real AI group was involved.",
+      "fullDetail": "A parody claims AI will replace all software engineers by Sep 2025, sparking memes like #EspressoEngineers.",
       "reporter": "The Daily Code Satire",
       "imageUrl": "https://i.ytimg.com/vi/ze5c6Yj0hrQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBS--EjSvItMhJBZdyETsuEc0iFPA",
       "timestamp": "2025-08-19"
@@ -49,7 +49,7 @@
       "id": 6,
       "title": "Tokyo Stocks Hit Record Highs for the Third Time in a Week",
       "shortDetail": "Nikkei 225 hits record high amid global economic optimism.",
-      "fullDetail": "Tokyo’s Nikkei 225 hit a record 43,714.31 on August 18, 2025, fueled by global economic optimism and expectations of a U.S. rate cut. It marks the third record high in five days, reflecting strong investor confidence in Japan’s economic recovery and regional stability.",
+      "fullDetail": "Japan’s Nikkei 225 reached 43,714.31 on Aug 18, the third record in five days, boosted by optimism and U.S. rate cut hopes.",
       "reporter": "Francis Tang",
       "imageUrl": "https://cdnx.premiumread.com/?url=https://www.japantimes.co.jp/japantimes/uploads/images/2025/08/18/488299.jpg&w=1000&q=100&f=webp&t=1.53",
       "timestamp": "2025-08-18"
@@ -58,7 +58,7 @@
       "id": 7,
       "title": "Women's World Championship Pool Previews: Pool A",
       "shortDetail": "Thailand hosts Pool A of the 2025 Women's Volleyball World Championship.",
-      "fullDetail": "The 2025 FIVB Women’s Volleyball World Championship opens in Bangkok with Pool A featuring Thailand, Netherlands, Sweden, and Egypt. Matches begin August 22. The top two teams from each pool advance to the knockout stage, with host nation Thailand aiming to leverage home support.",
+      "fullDetail": "The 2025 Volleyball World Championship starts in Bangkok with Pool A: Thailand, Netherlands, Sweden, Egypt.",
       "reporter": "Volleyball World",
       "imageUrl": "https://images.volleyballworld.com/image/upload/t_editorial_landscape_12_desktop/f_auto/fivb-prd/smnomg8ep3tsmgoyc7fa.jpg",
       "timestamp": "2025-08-18"
@@ -67,6 +67,7 @@
       "id": 8,
       "title": "Muzan Secretly Survives the Demon Slayer Finale",
       "shortDetail": "Shocking fan rumors claim Muzan Kibutsuji faked his defeat and is still alive, plotting his next karaoke night instead of world domination.",
+      "fullDetail": "Fan jokes say Muzan survived and is planning karaoke instead of world domination.",
       "reporter": "Muzan Kibutsuji",
       "imageUrl": "https://i.ytimg.com/vi/syyzK7_Ovzg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAUS6vwBh2m3--wjDON8EerKuIKNA",
       "timestamp": "2025-08-18"
@@ -75,186 +76,39 @@
       "id": 9,
       "title": "Valorant Upgrades to Unreal Engine 5 This Summer",
       "shortDetail": "Riot Games will transition Valorant from Unreal Engine 4 to Unreal Engine 5 in July 2025, aiming for better performance and faster downloads.",
+      "fullDetail": "Riot Games will shift Valorant to Unreal Engine 5 in July 2025 for smoother performance and faster downloads.",
       "reporter": "The Verge / Esports Insider",
       "imageUrl": "https://scontent.fcnx3-1.fna.fbcdn.net/v/t39.30808-6/522624008_1275382167380764_2848783821682116357_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHmOOfsX3pmecews58z9ke_JACwsShaoRUkALCxKFqhFWXOYRv2y0I6xC6hmdNNBhFzkMLd2xer_B1d7WeijcLm&_nc_ohc=R1nbkyLOKbcQ7kNvwH3G3jR&_nc_oc=AdnvLJ1boZhMGkQWNTmY1vOL_Jx01_MFF31KhUVUO0h7UKTb6x_h4HtXc39A5F7Y667xmkHuRymxRPWV4aQYYJLX&_nc_zt=23&_nc_ht=scontent.fcnx3-1.fna&_nc_gid=cDuRhUOo_UOB-GRtvs3_QA&oh=00_AfVtM1nF6w0edrVLAITKD_UIpzpIG8-z6ENNEbSVmoXGwQ&oe=68A937CC",
       "timestamp": "2025-05-30"
     }
   ],
   "comments": [
-    {
-      "id": 1,
-      "newsId": 1,
-      "userId": "HippoHunter",
-      "vote": "fake",
-      "text": "😂 A hippo swimming across borders? Clearly fake."
-    },
-    {
-      "id": 2,
-      "newsId": 1,
-      "userId": "ZooInsider",
-      "vote": "fake",
-      "text": "Moodeng was born at Khao Kheow. This is pure rumor."
-    },
-    {
-      "id": 3,
-      "newsId": 1,
-      "userId": "CambodiaPride",
-      "vote": "trust",
-      "text": "We’d be honored if she were Cambodian 🇰🇭"
-    },
-    {
-      "id": 4,
-      "newsId": 1,
-      "userId": "MemeLord",
-      "vote": "fake",
-      "text": "Netflix: *Border Crossing Hippo* 😂"
-    },
-    {
-      "id": 5,
-      "newsId": 2,
-      "userId": "TechWatcher",
-      "vote": "trust",
-      "text": "Makes sense with Trump’s chip strategy."
-    },
-    {
-      "id": 6,
-      "newsId": 2,
-      "userId": "InvestorJoe",
-      "vote": "trust",
-      "text": "Stock dropped 3.8% — feels real."
-    },
-    {
-      "id": 7,
-      "newsId": 2,
-      "userId": "SkepticalMind",
-      "vote": "fake",
-      "text": "Sounds like political theater."
-    },
-    {
-      "id": 8,
-      "newsId": 3,
-      "userId": "SeismoWatcher",
-      "vote": "trust",
-      "text": "900 quakes is terrifying. Stay safe."
-    },
-    {
-      "id": 9,
-      "newsId": 3,
-      "userId": "TokyoResident",
-      "vote": "trust",
-      "text": "Living near fault lines is stressful."
-    },
-    {
-      "id": 10,
-      "newsId": 3,
-      "userId": "GeoExpert",
-      "vote": "trust",
-      "text": "Magnitude 5.5 is no joke."
-    },
-    {
-      "id": 11,
-      "newsId": 4,
-      "userId": "CryptoFan123",
-      "vote": "fake",
-      "text": "No way Elon gives away 1M BTC."
-    },
-    {
-      "id": 12,
-      "newsId": 4,
-      "userId": "BlockchainGuru",
-      "vote": "fake",
-      "text": "This is a scam trap. Avoid."
-    },
-    {
-      "id": 13,
-      "newsId": 4,
-      "userId": "ElonWatcher",
-      "vote": "fake",
-      "text": "He can’t just print Bitcoin."
-    },
-    {
-      "id": 14,
-      "newsId": 5,
-      "userId": "CodeMaster",
-      "vote": "fake",
-      "text": "AI replacing devs by September? Hilarious."
-    },
-    {
-      "id": 15,
-      "newsId": 5,
-      "userId": "DebugQueen",
-      "vote": "fake",
-      "text": "AI isn’t taking our jobs that fast."
-    },
-    {
-      "id": 16,
-      "newsId": 5,
-      "userId": "CoffeeAndCode",
-      "vote": "fake",
-      "text": "Not swapping my keyboard for a coffee machine."
-    },
-    {
-      "id": 17,
-      "newsId": 6,
-      "userId": "MarketWatcher",
-      "vote": "trust",
-      "text": "Japan’s market is booming!"
-    },
-    {
-      "id": 18,
-      "newsId": 6,
-      "userId": "OptimistInvestor",
-      "vote": "trust",
-      "text": "Bull market confirmed!"
-    },
-    {
-      "id": 19,
-      "newsId": 6,
-      "userId": "GlobalEconomist",
-      "vote": "trust",
-      "text": "US rate cut hopes are boosting Asia."
-    },
-    {
-      "id": 20,
-      "newsId": 7,
-      "userId": "VolleyFan",
-      "vote": "trust",
-      "text": "Can’t wait to see Thailand play!"
-    },
-    {
-      "id": 21,
-      "newsId": 7,
-      "userId": "StatGuru",
-      "vote": "trust",
-      "text": "32 teams — this format is exciting."
-    },
-    {
-      "id": 22,
-      "newsId": 7,
-      "userId": "DutchSupporter",
-      "vote": "trust",
-      "text": "Rooting for the Netherlands!"
-    },
-    {
-      "id": 23,
-      "newsId": 7,
-      "userId": "SwedePower",
-      "vote": "trust",
-      "text": "Sweden’s first match will be tough."
-    },
-    {
-      "id": 24,
-      "newsId": 9,
-      "userId": "Fanatic",
-      "vote": "trust",
-      "text": "Excited for Valorant player!"
-    },
-    {
-      "id": 25,
-      "newsId": 9,
-      "userId": "SoccerFan88",
-      "vote": "fake",
-      "text": "Nah, It's fake XD"
+    {"id": 1, "newsId": 1, "userId": "HippoHunter", "vote": "fake", "text": "😂 A hippo swimming across borders? Clearly fake.", "imageUrl": null, "timestamp": "2025-06-14T10:32:00Z"},
+    {"id": 2, "newsId": 1, "userId": "ZooInsider", "vote": "fake", "text": "Moodeng was born at Khao Kheow. This is pure rumor.", "imageUrl": null, "timestamp": "2025-06-14T10:55:00Z"},
+    {"id": 3, "newsId": 1, "userId": "CambodiaPride", "vote": "trust", "text": "We’d be honored if she were Cambodian 🇰🇭", "imageUrl": null, "timestamp": "2025-06-14T11:40:00Z"},
+    {"id": 4, "newsId": 2, "userId": "TechWatcher", "vote": "trust", "text": "Makes sense with Trump’s chip strategy.", "imageUrl": null, "timestamp": "2025-08-18T14:20:00Z"},
+    {"id": 5, "newsId": 2, "userId": "InvestorJoe", "vote": "trust", "text": "Stock dropped 3.8% — feels real.", "imageUrl": null, "timestamp": "2025-08-18T14:45:00Z"},
+    {"id": 6, "newsId": 2, "userId": "SkepticalMind", "vote": "fake", "text": "Sounds like political theater.", "imageUrl": null, "timestamp": "2025-08-18T15:10:00Z"},
+    {"id": 7, "newsId": 3, "userId": "SeismoWatcher", "vote": "trust", "text": "900 quakes is terrifying. Stay safe.", "imageUrl": null, "timestamp": "2025-07-03T09:15:00Z"},
+    {"id": 8, "newsId": 3, "userId": "TokyoResident", "vote": "trust", "text": "Living near fault lines is stressful.", "imageUrl": null, "timestamp": "2025-07-03T09:40:00Z"},
+    {"id": 9, "newsId": 4, "userId": "CryptoFan123", "vote": "fake", "text": "No way Elon gives away 1M BTC.", "imageUrl": null, "timestamp": "2025-08-19T08:00:00Z"},
+    {"id": 10, "newsId": 4, "userId": "BlockchainGuru", "vote": "fake", "text": "This is a scam trap. Avoid.", "imageUrl": null, "timestamp": "2025-08-19T08:15:00Z"},
+    {"id": 11, "newsId": 4, "userId": "ElonWatcher", "vote": "fake", "text": "He can’t just print Bitcoin.", "imageUrl": null, "timestamp": "2025-08-19T08:30:00Z"},
+    {"id": 12, "newsId": 5, "userId": "CodeMaster", "vote": "fake", "text": "AI replacing devs by September? Hilarious.", "imageUrl": null, "timestamp": "2025-08-19T11:00:00Z"},
+    {"id": 13, "newsId": 5, "userId": "DebugQueen", "vote": "fake", "text": "AI isn’t taking our jobs that fast.", "imageUrl": null, "timestamp": "2025-08-19T11:05:00Z"},
+    {"id": 14, "newsId": 5, "userId": "CoffeeAndCode", "vote": "fake", "text": "Not swapping my keyboard for a coffee machine.", "imageUrl": null, "timestamp": "2025-08-19T11:20:00Z"},
+    {"id": 15, "newsId": 6, "userId": "MarketWatcher", "vote": "trust", "text": "Japan’s market is booming!", "imageUrl": null, "timestamp": "2025-08-18T12:00:00Z"},
+    {"id": 16, "newsId": 6, "userId": "OptimistInvestor", "vote": "trust", "text": "Bull market confirmed!", "imageUrl": null, "timestamp": "2025-08-18T12:20:00Z"},
+    {"id": 17, "newsId": 6, "userId": "GlobalEconomist", "vote": "trust", "text": "US rate cut hopes are boosting Asia.", "imageUrl": null, "timestamp": "2025-08-18T12:30:00Z"},
+    {"id": 18, "newsId": 7, "userId": "VolleyFan", "vote": "trust", "text": "Can’t wait to see Thailand play!", "imageUrl": null, "timestamp": "2025-08-18T14:00:00Z"},
+    {"id": 19, "newsId": 7, "userId": "StatGuru", "vote": "trust", "text": "32 teams — this format is exciting.", "imageUrl": null, "timestamp": "2025-08-18T14:10:00Z"},
+    {"id": 20, "newsId": 7, "userId": "DutchSupporter", "vote": "trust", "text": "Rooting for the Netherlands!", "imageUrl": null, "timestamp": "2025-08-18T14:30:00Z"},
+    {"id": 21, "newsId": 7, "userId": "SwedePower", "vote": "trust", "text": "Sweden’s first match will be tough.", "imageUrl": null, "timestamp": "2025-08-18T14:40:00Z"},
+    {"id": 22, "newsId": 3, "userId": "GeoExpert", "vote": "trust", "text": "Magnitude 5.5 is no joke.", "imageUrl": null, "timestamp": "2025-07-03T10:05:00Z"},
+    {"id": 23, "newsId": 1, "userId": "MemeLord", "vote": "fake", "text": "Netflix: *Border Crossing Hippo* 😂", "imageUrl": "https://picsum.photos/200/300", "timestamp": "2025-06-14T12:05:00Z"},
+    {"id": 24, "newsId": 7, "userId": "HostPride", "vote": "trust", "text": "Bangkok hosting is a big deal.", "imageUrl": null, "timestamp": "2025-08-18T14:50:00Z"},
+    {"id": 25,"newsId": 9,"userId": "Fanatic","vote": "trust","text": "Excited for Valorant player!"},
+    {"id": 26,"newsId": 9,"userId": "SoccerFan88","vote": "fake","text": "Nah, It's fake XD"
     }
   ]
 }
