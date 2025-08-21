@@ -85,7 +85,7 @@ async function fetchNewsDetail() {
 
 onMounted(fetchNewsDetail);
 // Watch props.id instead of route.params.id
-watch(() => props.id, fetchNewsDetail);
+watch([() => props.id, () => newsStore.newComments], fetchNewsDetail, { deep: true });
 
 // Function to handle comment likes
 const handleLike = (commentId: number) => {
@@ -197,5 +197,4 @@ const formatDate = (timestamp: string) => {
   </div>
 </template>
 
-<style>
-</style>
+<style></style>

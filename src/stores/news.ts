@@ -24,7 +24,7 @@ export const useNewsStore = defineStore('news', {
 
   actions: {
     addVote(payload: VotePayload): void {
-      if (!payload.newsId || payload.userId || !payload.vote) {
+      if (!payload.newsId || !payload.userId || !payload.vote) {
         console.error("Invalid vote payload: ", payload)
         return;
       }

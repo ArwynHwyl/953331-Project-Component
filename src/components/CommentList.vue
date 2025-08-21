@@ -4,7 +4,7 @@ import { useNewsStore } from '@/stores/news';
 import NewsService from '@/services/NewsService';
 import type { Comment } from '@/types';
 import { ThumbsUp } from 'lucide-vue-next';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   id: {
@@ -14,7 +14,6 @@ const props = defineProps({
 })
 
 const route = useRoute();
-const router = useRouter();
 
 const page = computed(() => Number(route.query.page) || 1);
 const limit = computed(() => Number(route.query.limit) || 2);
@@ -32,24 +31,41 @@ const hasNextPage = computed(() => {
 const newsStore = useNewsStore();
 const likedComments = ref<Set<number>>(new Set());
 const comments = ref<Comment[]>([]);
+const allApiComments = ref<Comment[]>([]);
+
+async function fetchAllApiComments() {
+  try {
+    const res = await NewsService.getCommentsByNewsId(newsId.value);
+    allApiComments.value = Array.isArray(res.data) ? res.data : [];
+  } catch (e) {
+    console.error('Failed to fetch all API comments', e);
+    allApiComments.value = [];
+  }
+}
 
 async function fetchComments() {
-  watchEffect(async () => {
-    try {
-      const commentsRes = await NewsService.getCommentsByNewsId(newsId.value, limit.value, page.value);
-      const originalComments = commentsRes.data as Comment[];
-      const newComments = newsStore.getNewCommentsByNewsId(newsId.value);
-      comments.value = [...originalComments, ...newComments]
-        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-      totalComment.value = commentsRes.headers['x-total-count']
-    } catch (e) {
-      comments.value = [];
+  try {
+    if (allApiComments.value.length === 0) {
+      await fetchAllApiComments();
     }
-  })
+
+    const newComments = newsStore.getNewCommentsByNewsId(newsId.value);
+
+    const merged = [...allApiComments.value, ...newComments];
+    merged.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+    const start = (page.value - 1) * limit.value;
+    const end = start + limit.value;
+    comments.value = merged.slice(start, end);
+
+    totalComment.value = allApiComments.value.length + newComments.length;
+  } catch (e) {
+    comments.value = [];
+  }
 }
 
 onMounted(fetchComments);
-watch([() => newsId.value, () => route.query.page, () => route.query.limit], () => { fetchComments });
+watch([newsId, page, limit], () => { fetchComments() });
 
 const handleLike = (commentId: number) => {
   if (likedComments.value.has(commentId)) {
@@ -82,7 +98,7 @@ const formatRelativeTime = (timestamp: string): string => {
 <template>
   <div class="border-t border-gray-200 pt-6">
     <div class="flex">
-      <h2 class="text-2xl font-bold mb-4">Comments ({{ comments.length }})</h2>
+      <h2 class="text-2xl font-bold mb-4">Comments ({{ totalComment }})</h2>
     </div>
     <div class="space-y-5">
       <div v-for="comment in comments" :key="comment.id" class="p-4 bg-white rounded-lg border border-gray-200">
@@ -104,11 +120,12 @@ const formatRelativeTime = (timestamp: string): string => {
       </div>
     </div>
 
-    <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 my-6 shadow-md flex justify-between items-center">
+    <div
+      class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 my-6 shadow-md flex justify-between items-center">
       <div class="w-1/3 flex justify-start">
         <RouterLink v-if="page !== 1" id="page-prev"
           class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-          :to="{  query: { limit, page: page - 1 } }" rel="prev">
+          :to="{ query: { limit, page: page - 1 } }" rel="prev">
           &#60; Prev Page
         </RouterLink>
       </div>
@@ -122,7 +139,7 @@ const formatRelativeTime = (timestamp: string): string => {
       <div class="w-1/3 flex justify-end">
         <RouterLink v-if="hasNextPage" id="page-next"
           class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-          :to="{  query: { limit, page: page + 1 } }" rel="next">
+          :to="{ query: { limit, page: page + 1 } }" rel="next">
           Next Page &#62;
         </RouterLink>
       </div>
