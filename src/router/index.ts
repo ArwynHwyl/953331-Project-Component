@@ -8,12 +8,16 @@ const router = createRouter({
       path: '/',
       name: 'news-detail-view',
       component: HomeView,
+      props: (route) => ({
+        page: parseInt(route.query.page?.toString() || '1'),
+        limit: parseInt(route.query.limit?.toString() || '2'),
+      }),
     },
     {
       path: '/news/:id',
       name: 'news-detail',
       component: () => import('../views/DetailView.vue'),
-    },{
+    }, {
       path: '/news/:id/comment',
       name: 'comment-view',
       component: () => import('../views/CommentView.vue'),
