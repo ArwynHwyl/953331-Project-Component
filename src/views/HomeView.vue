@@ -1,13 +1,50 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 import NewsService from '@/services/NewsService';
 import type { NewsStatus, HomeNewsItem } from '@/types';
 import { ref, onMounted } from 'vue';
 import NewsCard from '@/components/NewsCard.vue';
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next';
 
+import { ref as vueRef } from 'vue';
+
+// Helper function to determine news status based on votes
+import type { NewsStatus } from '@/types';
+import { RouterLink } from 'vue-router';
+import { type } from 'os';
+function getNewsStatus(fake: number, trust: number): NewsStatus {
+  const total = fake + trust;
+  if (total === 0) return 'under-review';
+  const trustRatio = trust / total;
+  if (trustRatio >= 0.55) return 'trusted';
+  if (trustRatio <= 0.45) return 'fake';
+  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed';
+  // fallback (should not reach here)
+  return 'disputed';
+}
+
+const props = defineProps({
+  limit: {
+    type: Number,
+    required: true,
+  },
+  page: {
+    type: Number,
+    required: true,
+  }
+})
+
 const news = ref<HomeNewsItem[]>([]);
-const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
+const filterType = vueRef<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
+
+const limit = computed(() => props.limit)
+const page = computed(() => props.page)
+const totalNews = ref(0)
+const hasNextPage = computed(() => {
+  const totalPages = Math.ceil(totalNews.value / limit.value)
+  return page.value < totalPages
+})
+
 const filteredNews = computed(() => {
   switch (filterType.value) {
     case 'real':
@@ -32,42 +69,36 @@ const totalVotes = computed(() =>
   news.value.reduce((sum, item) => sum + (item.fakeVotes ?? 0) + (item.trustVotes ?? 0), 0)
 );
 
-function getNewsStatus(fake: number, trust: number): NewsStatus {
-  const total = fake + trust;
-  if (total === 0) return 'under-review';
-  const trustRatio = trust / total;
-  if (trustRatio >= 0.55) return 'trusted';
-  if (trustRatio <= 0.45) return 'fake';
-  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed';
-  // fallback (should not reach here)
-  return 'disputed';
-}
 
-onMounted(async () => {
-  try {
-    const [newsRes, commentsRes] = await Promise.all([
-      NewsService.getNews(),
-      NewsService.getAllComments()
-    ]);
-    const allComments = commentsRes.data as import('@/types').Comment[];
-    news.value = (newsRes.data as import('@/types').NewsItem[]).map((item) => {
-      const newsComments = allComments.filter((c) => c.newsId === item.id);
-      const fakeVotes = newsComments.filter((c) => c.vote === 'fake').length;
-      const trustVotes = newsComments.filter((c) => c.vote === 'trust').length;
-      const commentCount = newsComments.length;
-      return {
-        ...item,
-        fakeVotes,
-        trustVotes,
-        totalVotesCount: fakeVotes + trustVotes,
-        commentCount,
-        status: getNewsStatus(fakeVotes, trustVotes)
-      };
-    });
-  } catch (error) {
-    console.error('Error fetching news or comments:', error);
-  }
-});
+onMounted(() => {
+  watchEffect(async () => {
+    try {
+      const [newsRes, commentsRes] = await Promise.all([
+        NewsService.getNews(limit.value, page.value),
+        NewsService.getAllComments()
+      ]);
+      const allComments = commentsRes.data;
+      news.value = newsRes.data.map((item: any) => {
+        const newsComments = allComments.filter((c: any) => c.newsId === item.id);
+        const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+        const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+        const commentCount = newsComments.length;
+        return {
+          ...item,
+          fakeVotes,
+          trustVotes,
+          totalVotesCount: fakeVotes + trustVotes,
+          commentCount,
+          status: getNewsStatus(fakeVotes, trustVotes)
+        };
+      }) as HomeNewsItem[];
+      totalNews.value = newsRes.headers['x-total-count']
+    } catch (error) {
+      console.error('Error fetching news or comments:', error);
+    }
+  })
+})
+
 </script>
 
 <template>
@@ -114,7 +145,7 @@ onMounted(async () => {
             <span class="group-hover:text-white">Real</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
-                news.filter(item => item.trustVotes > item.fakeVotes).length }}</span>
+                news.filter(item => item.trustVotes > item.fakeVotes).length}}</span>
           </button>
           <!-- Fake -->
           <button @click="filterType = 'fake'"
@@ -123,7 +154,7 @@ onMounted(async () => {
             <span class="group-hover:text-white">Fake</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
-                news.filter(item => item.trustVotes < item.fakeVotes).length }}</span>
+                news.filter(item => item.trustVotes < item.fakeVotes).length}}</span>
           </button>
           <!-- Disputed -->
           <button @click="filterType = 'disputed'"
@@ -133,7 +164,7 @@ onMounted(async () => {
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
               {{news.filter(item => item.trustVotes === item.fakeVotes && (item.trustVotes + item.fakeVotes) >
-              0).length }}
+                0).length}}
             </span>
           </button>
           <!-- Under Review -->
@@ -160,9 +191,49 @@ onMounted(async () => {
           <span class="text-sm text-gray-700">per page</span>
         </div> -->
       </div>
+
       <!-- Card Item-->
       <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md">
         <NewsCard v-for="item in filteredNews" :key="item.id" :news="item" :comments="[]" />
+      </div>
+
+      <!-- Pagination -->
+      <!--
+      <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between">
+        <RouterLink id="page-prev" class="flex-1 text-left no-underline text-gray-700 hover:text-gray-900"
+          :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }" rel="prev" v-if="page != 1">
+          &#60; Prev Page
+        </RouterLink>
+        <span>Page {{ page }} of {{ Math.ceil(totalNews / limit) || 1 }}</span>
+        <RouterLink id="page-next" class="flex-1 text-right no-underline text-gray-700 hover:text-gray-900"
+          :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }" rel="next" v-if="hasNextPage">
+          Next Page &#62;
+        </RouterLink>
+      </div>
+      -->
+      <div
+        class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
+        <div class="w-1/3 flex justify-start">
+          <RouterLink v-if="page !== 1" id="page-prev"
+            class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
+            :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }" rel="prev">
+            &#60; Prev Page
+          </RouterLink>
+        </div>
+
+        <div class="w-1/3 flex justify-center">
+          <span class="whitespace-nowrap">
+            Page {{ page }} of {{ Math.ceil(totalNews / limit) || 1 }}
+          </span>
+        </div>
+
+        <div class="w-1/3 flex justify-end">
+          <RouterLink v-if="hasNextPage" id="page-next"
+            class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
+            :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }" rel="next">
+            Next Page &#62;
+          </RouterLink>
+        </div>
       </div>
     </div>
   </main>
