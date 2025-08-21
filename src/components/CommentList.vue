@@ -83,7 +83,7 @@ const formatRelativeTime = (timestamp: string): string => {
   <div class="border-t border-gray-200 pt-6">
     <div class="flex">
       <h2 class="text-2xl font-bold mb-4">Comments ({{ comments.length }})</h2>
-      <router-link :to="{ name: 'news-detail', params: { id: $route.params.id } }"
+      <router-link :to="{ name: 'vote-view', params: { id: $route.params.id } }"
         class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg flex items-center gap-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

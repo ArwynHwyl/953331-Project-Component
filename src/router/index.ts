@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DetailView from '@/views/DetailView.vue'
 import CommentView from '@/views/CommentView.vue'
+import VoteComment from '@/components/VoteComment.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,12 @@ const router = createRouter({
       component: CommentView,
       props: true
     },
+    {
+      path: '/news/:id/vote',
+      name: 'vote-view',
+      component: VoteComment,
+      props: true
+    }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
