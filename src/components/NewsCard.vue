@@ -26,7 +26,6 @@ const getStatusInfo = (status: NewsStatus) => {
       return { text: 'Under Review', icon: Clock, color: 'gray' };
   }
 };
-
 </script>
 
 <template>

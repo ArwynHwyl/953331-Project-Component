@@ -175,19 +175,6 @@ const formatDate = (timestamp: string) => {
           <ChevronDown :size="16" class="text-red-600" /> Fake ({{ state.news.fakeVotes }})
         </button>
       </div>
-      <router-link v-if="state.news" :to="{ name: 'comment-view', params: { id: state.news.id } }"
-        class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg flex items-center gap-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="lucide lucide-vote">
-          <polyline points="9 12 12 15 20 7" />
-          <path d="M4 21V8a2 2 0 0 1 2-2h1" />
-          <path d="M4 12H2" />
-          <path d="M10 12H8" />
-          <path d="M16 6H8a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2" />
-        </svg>
-        <span>Vote &amp; Comment</span>
-      </router-link>
       <span class="text-sm text-gray-600 ml-auto">{{ state.news.totalVotesCount > 0 ? Math.round((state.news.trustVotes
         / state.news.totalVotesCount) * 100) : 0 }}% believe this is trust</span>
     </div>
@@ -206,15 +193,6 @@ const formatDate = (timestamp: string) => {
     <!-- Full Detail -->
     <div class="prose max-w-none text-gray-800 mb-8" style="white-space: pre-wrap;">{{ state.news.fullDetail }}</div>
 
-    <!-- View Comment Button --->
-    <div class="border-t border-gray-200 pt-6">
-      <div class="flex justify-center">
-        <router-link :to="{ name: 'comment-view', params: { id: props.id } }">
-          View All {{ state.news.commentCount }} Comments
-        </router-link>
-      </div>
-    </div>
-
   </div>
   <div v-else class="text-center text-gray-500 mt-10">
     <h2 class="text-2xl">News not found</h2>
@@ -223,11 +201,4 @@ const formatDate = (timestamp: string) => {
 </template>
 
 <style>
-.prose {
-  line-height: 1.75;
-}
-
-.prose p {
-  margin-bottom: 1em;
-}
 </style>
