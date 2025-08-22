@@ -38,6 +38,9 @@ const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('a
 
 const limit = computed(() => props.limit)
 const page = computed(() => props.page)
+const allNewsCount = ref(0)
+const allTotalVotes = ref(0)
+const allRealNewsCount = ref(0)
 const totalNews = ref(0)
 const hasNextPage = computed(() => {
   const totalPages = Math.ceil(totalNews.value / limit.value)
@@ -60,21 +63,13 @@ const filteredNews = computed(() => {
   }
 });
 
-const totalRealNews = computed(() =>
-  news.value.filter(item => item.trustVotes > item.fakeVotes).length
-);
-
-const totalVotes = computed(() =>
-  news.value.reduce((sum, item) => sum + (item.fakeVotes ?? 0) + (item.trustVotes ?? 0), 0)
-);
-
-
 onMounted(() => {
   watchEffect(async () => {
     try {
-      const [newsRes, commentsRes] = await Promise.all([
+      const [newsRes, commentsRes, initRes] = await Promise.all([
         NewsService.getNews(limit.value, page.value),
-        NewsService.getAllComments()
+        NewsService.getAllComments(),
+        NewsService.initNews()
       ]);
 
       const allComments = [
@@ -98,37 +93,19 @@ onMounted(() => {
         };
       }) as HomeNewsItem[];
 
-      totalNews.value = newsRes.headers['x-total-count'];
+    totalNews.value = newsRes.headers['x-total-count'];
+    allNewsCount.value = initRes.data.length;
+    allTotalVotes.value = commentsRes.data.filter((item: any) => item.vote === 'fake' || item.vote === 'trust').length;
+    allRealNewsCount.value = initRes.data.filter((newsItem: any) => {
+      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+      return trustVotes > fakeVotes;
+    }).length;
     } catch (error) {
       console.error('Error fetching news or comments:', error);
     }
   });
-  // watchEffect(async () => {
-  //   try {
-  //     const [newsRes, commentsRes] = await Promise.all([
-  //       NewsService.getNews(limit.value, page.value),
-  //       NewsService.getAllComments()
-  //     ]);
-  //     const allComments = commentsRes.data;
-  //     news.value = newsRes.data.map((item: any) => {
-  //       const newsComments = allComments.filter((c: any) => c.newsId === item.id);
-  //       const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
-  //       const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
-  //       const commentCount = newsComments.length;
-  //       return {
-  //         ...item,
-  //         fakeVotes,
-  //         trustVotes,
-  //         totalVotesCount: fakeVotes + trustVotes,
-  //         commentCount,
-  //         status: getNewsStatus(fakeVotes, trustVotes)
-  //       };
-  //     }) as HomeNewsItem[];
-  //     totalNews.value = newsRes.headers['x-total-count']
-  //   } catch (error) {
-  //     console.error('Error fetching news or comments:', error);
-  //   }
-  // })
 })
 
 </script>
@@ -141,15 +118,15 @@ onMounted(() => {
       <!-- Stats -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
-          <div class="text-3xl sm:text-4xl font-bold">{{ totalVotes }}</div>
+          <div class="text-3xl sm:text-4xl font-bold">{{ allTotalVotes }}</div>
           <div class="text-2xl sm:text-base font-bold">Total Votes</div>
         </div>
         <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
-          <div class="text-3xl sm:text-4xl font-bold">{{ news.length }}</div>
+          <div class="text-3xl sm:text-4xl font-bold">{{ allNewsCount }}</div>
           <div class="text-2xl sm:text-base font-bold">News</div>
         </div>
         <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
-          <div class="text-3xl sm:text-4xl font-bold">{{ totalRealNews }}</div>
+          <div class="text-3xl sm:text-4xl font-bold">{{ allRealNewsCount }}</div>
           <div class="text-2xl sm:text-base font-bold">Real</div>
         </div>
       </div>
