@@ -1,7 +1,4 @@
 <script setup lang="ts">
-const allFakeNewsCount = ref(0)
-const allDisputedNewsCount = ref(0)
-const allUnderReviewNewsCount = ref(0)
 import { computed, watchEffect } from 'vue';
 import NewsService from '@/services/NewsService';
 import type { NewsStatus, HomeNewsItem } from '@/types';
@@ -11,16 +8,6 @@ import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide
 
 import { RouterLink } from 'vue-router';
 import { useNewsStore } from '@/stores/news';
-function getNewsStatus(fake: number, trust: number): NewsStatus {
-  const total = fake + trust;
-  if (total === 0) return 'under-review';
-  const trustRatio = trust / total;
-  if (trustRatio >= 0.55) return 'trusted';
-  if (trustRatio <= 0.45) return 'fake';
-  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed';
-  // fallback (should not reach here)
-  return 'disputed';
-}
 
 const props = defineProps({
   limit: {
@@ -35,21 +22,20 @@ const props = defineProps({
 
 const newsStore = useNewsStore();
 
-const news = ref<HomeNewsItem[]>([]); // สำหรับ compatibility
+const news = ref<HomeNewsItem[]>([]);
 const allNews = ref<HomeNewsItem[]>([]);
 const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
 
 const limit = computed(() => props.limit)
 const page = computed(() => props.page)
+
 const allNewsCount = ref(0)
 const allTotalVotes = ref(0)
 const allRealNewsCount = ref(0)
 const totalNews = ref(0)
-const hasNextPage = computed(() => {
-  const totalPages = Math.ceil(totalNews.value / limit.value)
-  return page.value < totalPages
-})
-
+const allFakeNewsCount = ref(0)
+const allDisputedNewsCount = ref(0)
+const allUnderReviewNewsCount = ref(0)
 
 const filteredAllNews = computed(() => {
   switch (filterType.value) {
@@ -71,6 +57,16 @@ const paginatedNews = computed(() => {
   const start = (page.value - 1) * limit.value;
   return filteredAllNews.value.slice(start, start + limit.value);
 });
+
+function getNewsStatus(fake: number, trust: number): NewsStatus {
+  const total = fake + trust;
+  if (total === 0) return 'under-review';
+  const trustRatio = trust / total;
+  if (trustRatio >= 0.55) return 'trusted';
+  if (trustRatio <= 0.45) return 'fake';
+  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed';
+  return 'disputed';
+}
 
 onMounted(() => {
   watchEffect(async () => {
@@ -275,6 +271,7 @@ onMounted(() => {
           </RouterLink>
         </div>
       </div>
+
     </div>
   </main>
 </template>
