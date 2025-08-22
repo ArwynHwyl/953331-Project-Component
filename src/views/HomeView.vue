@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const allFakeNewsCount = ref(0)
+const allDisputedNewsCount = ref(0)
+const allUnderReviewNewsCount = ref(0)
 import { computed, watchEffect } from 'vue';
 import NewsService from '@/services/NewsService';
 import type { NewsStatus, HomeNewsItem } from '@/types';
@@ -6,7 +9,6 @@ import { ref, onMounted } from 'vue';
 import NewsCard from '@/components/NewsCard.vue';
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next';
 
-// Helper function to determine news status based on votes
 import { RouterLink } from 'vue-router';
 import { useNewsStore } from '@/stores/news';
 function getNewsStatus(fake: number, trust: number): NewsStatus {
@@ -33,7 +35,8 @@ const props = defineProps({
 
 const newsStore = useNewsStore();
 
-const news = ref<HomeNewsItem[]>([]);
+const news = ref<HomeNewsItem[]>([]); // สำหรับ compatibility
+const allNews = ref<HomeNewsItem[]>([]);
 const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all');
 
 const limit = computed(() => props.limit)
@@ -47,20 +50,26 @@ const hasNextPage = computed(() => {
   return page.value < totalPages
 })
 
-const filteredNews = computed(() => {
+
+const filteredAllNews = computed(() => {
   switch (filterType.value) {
     case 'real':
-      return news.value.filter(item => item.trustVotes > item.fakeVotes);
+      return allNews.value.filter(item => item.trustVotes > item.fakeVotes);
     case 'fake':
-      return news.value.filter(item => item.trustVotes < item.fakeVotes);
+      return allNews.value.filter(item => item.trustVotes < item.fakeVotes);
     case 'disputed':
-      return news.value.filter(item => item.trustVotes === item.fakeVotes && (item.trustVotes + item.fakeVotes) > 0);
+      return allNews.value.filter(item => item.trustVotes === item.fakeVotes && (item.trustVotes + item.fakeVotes) > 0);
     case 'under-review':
-      return news.value.filter(item => (item.trustVotes + item.fakeVotes) === 0);
+      return allNews.value.filter(item => (item.trustVotes + item.fakeVotes) === 0);
     case 'all':
     default:
-      return news.value;
+      return allNews.value;
   }
+});
+
+const paginatedNews = computed(() => {
+  const start = (page.value - 1) * limit.value;
+  return filteredAllNews.value.slice(start, start + limit.value);
 });
 
 onMounted(() => {
@@ -77,12 +86,26 @@ onMounted(() => {
         ...newsStore.newComments
       ];
 
+      allNews.value = initRes.data.map((item: any) => {
+        const newsComments = allComments.filter((c: any) => c.newsId === item.id);
+        const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+        const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+        const commentCount = newsComments.length;
+        return {
+          ...item,
+          fakeVotes,
+          trustVotes,
+          totalVotesCount: fakeVotes + trustVotes,
+          commentCount,
+          status: getNewsStatus(fakeVotes, trustVotes)
+        };
+      }) as HomeNewsItem[];
+
       news.value = newsRes.data.map((item: any) => {
         const newsComments = allComments.filter((c: any) => c.newsId === item.id);
         const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
         const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
         const commentCount = newsComments.length;
-
         return {
           ...item,
           fakeVotes,
@@ -101,6 +124,24 @@ onMounted(() => {
       const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
       const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
       return trustVotes > fakeVotes;
+    }).length;
+    allFakeNewsCount.value = initRes.data.filter((newsItem: any) => {
+      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+      return trustVotes < fakeVotes;
+    }).length;
+    allDisputedNewsCount.value = initRes.data.filter((newsItem: any) => {
+      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+      return trustVotes === fakeVotes && (trustVotes + fakeVotes) > 0;
+    }).length;
+    allUnderReviewNewsCount.value = initRes.data.filter((newsItem: any) => {
+      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+      return (trustVotes + fakeVotes) === 0;
     }).length;
     } catch (error) {
       console.error('Error fetching news or comments:', error);
@@ -144,8 +185,8 @@ onMounted(() => {
             <span class="group-hover:text-white">All News</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600 transition-colors">
-              {{ news.length }}
-            </span>
+                {{ allNewsCount }}
+              </span>
           </button>
           <!-- Real -->
           <button @click="filterType = 'real'"
@@ -154,7 +195,7 @@ onMounted(() => {
             <span class="group-hover:text-white">Real</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
-                news.filter(item => item.trustVotes > item.fakeVotes).length}}</span>
+                  allRealNewsCount }}</span>
           </button>
           <!-- Fake -->
           <button @click="filterType = 'fake'"
@@ -163,7 +204,7 @@ onMounted(() => {
             <span class="group-hover:text-white">Fake</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
-                news.filter(item => item.trustVotes < item.fakeVotes).length}}</span>
+                  allFakeNewsCount }}</span>
           </button>
           <!-- Disputed -->
           <button @click="filterType = 'disputed'"
@@ -172,9 +213,8 @@ onMounted(() => {
             <span class="group-hover:text-white">Disputed</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
-              {{news.filter(item => item.trustVotes === item.fakeVotes && (item.trustVotes + item.fakeVotes) >
-                0).length}}
-            </span>
+                {{ allDisputedNewsCount }}
+              </span>
           </button>
           <!-- Under Review -->
           <button @click="filterType = 'under-review'"
@@ -183,8 +223,8 @@ onMounted(() => {
             <span class="group-hover:text-white">Under Review</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
-              {{news.filter(item => (item.trustVotes + item.fakeVotes) === 0).length}}
-            </span>
+                {{ allUnderReviewNewsCount }}
+              </span>
           </button>
         </div>
         <!-- Show x per page -->
@@ -194,7 +234,7 @@ onMounted(() => {
             class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
             :value="limit"
             @change="e => $router.push({ name: 'news-detail-view', query: { limit: Number(e.target.value), page: 1 } })">
-            <option v-for="n in Array.from({length: totalNews}, (_,i)=>i+1)" :key="n" :value="n">{{ n }}</option>
+            <option v-for="n in Array.from({length: allNewsCount}, (_,i)=>i+1)" :key="n" :value="n">{{ n }}</option>
           </select>
           <span class="text-sm text-gray-700">per page</span>
         </div>
@@ -202,7 +242,12 @@ onMounted(() => {
 
       <!-- Card Item-->
       <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md">
-        <NewsCard v-for="item in filteredNews" :key="item.id" :news="item" :comments="[]" />
+        <NewsCard
+          v-for="item in paginatedNews"
+          :key="item.id"
+          :news="item"
+          :comments="[]"
+        />
       </div>
 
       <!-- Pagination -->
@@ -218,12 +263,12 @@ onMounted(() => {
 
         <div class="w-1/3 flex justify-center">
           <span class="whitespace-nowrap">
-            Page {{ page }} of {{ Math.ceil(totalNews / limit) || 1 }}
+            Page {{ page }} of {{ Math.ceil(filteredAllNews.length / limit) || 1 }}
           </span>
         </div>
 
         <div class="w-1/3 flex justify-end">
-          <RouterLink v-if="hasNextPage" id="page-next"
+          <RouterLink v-if="page < Math.ceil(filteredAllNews.length / limit)" id="page-next"
             class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
             :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }" rel="next">
             Next Page &#62;
