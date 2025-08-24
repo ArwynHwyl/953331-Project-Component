@@ -11,7 +11,7 @@ const page = Number(route.params.page) || 1;
 </script>
 
 <template>
-  <main class="min-h-screen bg-gray-50 p-4 sm:p-8 rounded-md ">
+  <main class=" bg-gray-50 p-4 sm:p-8 rounded-md ">
     <div class="max-w-3xl mx-auto">
       <div class="mb-8">
         <router-link :to="`/news/${id}`"

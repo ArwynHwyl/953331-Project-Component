@@ -8,7 +8,7 @@ const id = Number(route.params.id);
 </script>
 
 <template>
-  <main class="min-h-screen bg-gray-50 p-4 sm:p-8 rounded-md">
+  <main class=" bg-gray-50 p-4 sm:p-8 rounded-md">
     <div class="max-w-3xl mx-auto">
       <VoteformCard :id="id" />
     </div>
