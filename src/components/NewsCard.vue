@@ -36,9 +36,10 @@ const getStatusInfo = (status: NewsStatus) => {
         <img :src="news.imageUrl || 'https://placehold.co/150x150'" :alt="news.title"
           class="w-full sm:w-36 h-36 object-cover rounded-lg">
         <div class="flex-1">
-          <div class="flex justify-between items-start mb-2">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start mb-2">
             <h3 class="text-xl font-bold text-gray-800">{{ news.title }}</h3>
-            <span class="flex-shrink-0 ml-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+            <span
+              class="flex-shrink-0 mt-2 sm:mt-0 sm:ml-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
               :class="`bg-${getStatusInfo(news.status).color}-100 text-${getStatusInfo(news.status).color}-800`">
               <component :is="getStatusInfo(news.status).icon" :size="16" class="mr-1.5" />
               {{ getStatusInfo(news.status).text }}

@@ -135,49 +135,51 @@ const formatDate = (timestamp: string) => {
 </script>
 
 <template>
-  <div v-if="state.news" class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+   <div v-if="state.news" class="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
     <!-- Header -->
-    <img src="../../src/assets/forwhite.png" alt="Logo" class="h-13 mb-4 mx-auto" />
-    <div class="flex justify-between items-start mb-4">
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">{{ state.news.title }}</h1>
-      <span class="flex-shrink-0 ml-4 mt-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+    <img src="../../src/assets/forwhite.png" alt="Logo" class="h-10 sm:h-13 mb-3 sm:mb-4 mx-auto" />
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
+      <h1 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">{{ state.news.title }}</h1>
+      <span class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium w-fit flex-shrink-0"
         :class="`bg-${getStatusInfo(state.news.status).color}-100 text-${getStatusInfo(state.news.status).color}-800`">
-        <component :is="getStatusInfo(state.news.status).icon" :size="16" class="mr-1.5" />
+        <component :is="getStatusInfo(state.news.status).icon" :size="14" class="mr-1 sm:mr-1.5" />
         {{ getStatusInfo(state.news.status).text }}
       </span>
     </div>
 
     <!-- Metadata -->
-    <div class="flex flex-wrap items-center text-sm text-gray-500 mb-4 gap-x-4 gap-y-1">
+    <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center text-xs sm:text-sm text-gray-500 mb-4 gap-1 sm:gap-x-4 sm:gap-y-1">
       <span class="flex items-center">
-        <User :size="14" class="mr-1.5" /> By {{ state.news.reporter }}
+        <User :size="12" class="mr-1 sm:mr-1.5" /> By {{ state.news.reporter }}
       </span>
       <span class="flex items-center">
-        <Calendar :size="14" class="mr-1.5" /> {{ formatDate(state.news.timestamp) }}
+        <Calendar :size="12" class="mr-1 sm:mr-1.5" /> {{ formatDate(state.news.timestamp) }}
       </span>
       <span class="flex items-center">
-        <MessageCircle :size="14" class="mr-1.5" /> {{ state.news.commentCount }} Comments
+        <MessageCircle :size="12" class="mr-1 sm:mr-1.5" /> {{ state.news.commentCount }} Comments
       </span>
     </div>
 
     <!-- Voting Section -->
-    <div class="flex flex-wrap items-center gap-2 border-t border-b border-gray-200 py-3 mb-6">
-      <div class="flex items-center gap-2">
-        <button disabled aria-disabled="true"
-          class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 bg-gray-50 text-gray-600 cursor-not-allowed opacity-80">
-          <ChevronUp :size="16" class="text-green-600" /> Trust ({{ state.news.trustVotes }})
-        </button>
-        <button disabled aria-disabled="true"
-          class="px-3 py-1.5 text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-2 bg-gray-50 text-gray-600 cursor-not-allowed opacity-80">
-          <ChevronDown :size="16" class="text-red-600" /> Fake ({{ state.news.fakeVotes }})
-        </button>
+    <div class="border-t border-b border-gray-200 py-3 mb-4 sm:mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2 sm:mb-0">
+        <div class="flex items-center gap-2 flex-1">
+          <button disabled aria-disabled="true"
+            class="px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-1 sm:gap-2 bg-gray-50 text-gray-600 cursor-not-allowed opacity-80 flex-1 sm:flex-none justify-center">
+            <ChevronUp :size="14" class="text-green-600" /> Trust ({{ state.news.trustVotes }})
+          </button>
+          <button disabled aria-disabled="true"
+            class="px-2 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold border border-gray-300 rounded-md flex items-center gap-1 sm:gap-2 bg-gray-50 text-gray-600 cursor-not-allowed opacity-80 flex-1 sm:flex-none justify-center">
+            <ChevronDown :size="14" class="text-red-600" /> Fake ({{ state.news.fakeVotes }})
+          </button>
+        </div>
+        <span class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">{{ state.news.totalVotesCount > 0 ? Math.round((state.news.trustVotes
+          / state.news.totalVotesCount) * 100) : 0 }}% believe this is trust</span>
       </div>
-      <span class="text-sm text-gray-600 ml-auto">{{ state.news.totalVotesCount > 0 ? Math.round((state.news.trustVotes
-        / state.news.totalVotesCount) * 100) : 0 }}% believe this is trust</span>
     </div>
 
     <!-- Progress Bar -->
-    <div class="w-full bg-red-200 rounded-full h-1.5 mb-6">
+    <div class="w-full bg-red-200 rounded-full h-1.5 mb-4 sm:mb-6">
       <div class="bg-green-500 h-1.5 rounded-full"
         :style="{ width: `${state.news.totalVotesCount > 0 ? (state.news.trustVotes / state.news.totalVotesCount) * 100 : 0}%` }">
       </div>
@@ -185,10 +187,10 @@ const formatDate = (timestamp: string) => {
 
     <!-- Main Image -->
     <img :src="state.news.imageUrl ?? ''" :alt="state.news.title ?? ''"
-      class="w-full h-auto object-cover rounded-lg mb-6">
+      class="w-full h-auto object-cover rounded-lg mb-4 sm:mb-6">
 
     <!-- Full Detail -->
-    <div class="prose max-w-none text-gray-800 mb-8" style="white-space: pre-wrap;">{{ state.news.fullDetail }}</div>
+    <div class="prose max-w-none text-gray-800 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed" style="white-space: pre-wrap;">{{ state.news.fullDetail }}</div>
 
   </div>
   <div v-else class="text-center text-gray-500 mt-10">
