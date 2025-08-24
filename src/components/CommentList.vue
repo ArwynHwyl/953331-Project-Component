@@ -105,6 +105,15 @@ const formatRelativeTime = (timestamp: string): string => {
         <div class="flex justify-between items-start">
           <div>
             <strong class="text-sm font-semibold text-gray-900 mr-2">{{ comment.userId }}</strong>
+            <span
+              :class="{
+                'bg-green-100 text-green-800': comment.vote === 'trust',
+                'bg-red-100 text-red-800': comment.vote === 'fake'
+              }"
+              class="px-2 py-0.5 text-xs font-medium rounded-full"
+            >
+              {{ comment.vote }}
+            </span>
             <span class="text-xs text-gray-500">{{ formatRelativeTime(comment.timestamp) }}</span>
           </div>
           <button @click="handleLike(comment.id)"
