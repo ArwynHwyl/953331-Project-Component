@@ -100,32 +100,70 @@ const formatRelativeTime = (timestamp: string): string => {
     <div class="flex">
       <h2 class="text-2xl font-bold mb-4">Comments ({{ totalComment }})</h2>
     </div>
-    <div class="space-y-5">
-      <div v-for="comment in comments" :key="comment.id" class="p-4 bg-white rounded-lg border border-gray-200">
-        <div class="flex justify-between items-start">
-          <div>
-            <strong class="text-sm font-semibold text-gray-900 mr-2">{{ comment.userId }}</strong>
-            <span
-              :class="{
-                'bg-green-100 text-green-800': comment.vote === 'trust',
-                'bg-red-100 text-red-800': comment.vote === 'fake'
-              }"
-              class="px-2 py-0.5 text-xs font-medium rounded-full"
+    <div class="space-y-6">
+      <div
+        v-for="comment in comments"
+        :key="comment.id"
+        class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200 overflow-hidden"
+      >
+        <div class="flex items-start gap-4">
+          <div class="flex-none">
+            <div
+              :style="{ backgroundImage: `linear-gradient(135deg,#7c3aed,#06b6d4)` }"
+              class="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-sm"
             >
-              {{ comment.vote }}
-            </span>
-            <span class="text-xs text-gray-500">{{ formatRelativeTime(comment.timestamp) }}</span>
+              {{ (String(comment.userId).charAt(0) || 'U').toUpperCase() }}
+            </div>
           </div>
-          <button @click="handleLike(comment.id)"
-            class="flex items-center text-sm hover:bg-gray-100 rounded-md px-2 py-1 transition-colors"
-            :class="likedComments.has(comment.id) ? 'text-blue-600' : 'text-gray-600'">
-            <ThumbsUp :size="16" class="mr-1.5" :class="likedComments.has(comment.id) ? 'fill-current' : ''" />
-            <span>{{ getLikeCount(comment.id) }}</span>
-          </button>
+
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-baseline gap-2">
+                <div class="text-sm font-semibold text-gray-900">{{ comment.userId }}</div>
+
+                <span
+                  :class="{
+                    'bg-green-100 text-green-800': comment.vote === 'trust',
+                    'bg-red-100 text-red-800': comment.vote === 'fake',
+                    'bg-gray-100 text-gray-800': !comment.vote
+                  }"
+                  class="text-xs px-2 py-0.5 rounded-full font-medium uppercase tracking-wide"
+                >
+                  {{ comment.vote || 'unknown' }}
+                </span>
+
+                <span class="text-xs text-gray-400 ml-2">{{ formatRelativeTime(comment.timestamp) }}</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button
+                  @click="handleLike(comment.id)"
+                  :aria-pressed="likedComments.has(comment.id)"
+                  class="flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                  :class="likedComments.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
+                >
+                  <ThumbsUp :size="14" :class="likedComments.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
+                  <span>{{ getLikeCount(comment.id) }}</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="mt-3 text-sm text-gray-700 leading-relaxed">{{ comment.text }}</p>
+
+            <div v-if="comment.imageUrl" class="mt-3">
+              <img
+                :src="comment.imageUrl"
+                alt="Comment image"
+                loading="lazy"
+                class="w-full max-w-[240px] max-h-[160px] rounded-lg object-cover border border-gray-100 shadow-sm"
+              />
+            </div>
+
+            <div class="mt-3 flex items-center gap-3 text-xs text-gray-500">
+              <span class="px-2 py-1 bg-gray-50 rounded-full">ID #{{ comment.id }}</span>
+            </div>
+          </div>
         </div>
-        <p class="text-gray-800 my-3">{{ comment.text }}</p>
-        <img v-if="comment.imageUrl" :src="comment.imageUrl" alt="Comment image"
-          class="mt-2 rounded-lg max-w-xs max-h-64 object-cover border">
       </div>
     </div>
 
