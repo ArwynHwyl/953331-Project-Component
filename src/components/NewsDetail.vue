@@ -138,9 +138,9 @@ const formatDate = (timestamp: string) => {
    <div v-if="state.news" class="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
     <!-- Header -->
     <img src="../../src/assets/forwhite.png" alt="Logo" class="h-10 sm:h-13 mb-3 sm:mb-4 mx-auto" />
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
-      <h1 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">{{ state.news.title }}</h1>
-      <span class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium w-fit flex-shrink-0"
+    <div class="mb-4">
+      <h1 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-2">{{ state.news.title }}</h1>
+      <span class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium w-fit"
         :class="`bg-${getStatusInfo(state.news.status).color}-100 text-${getStatusInfo(state.news.status).color}-800`">
         <component :is="getStatusInfo(state.news.status).icon" :size="14" class="mr-1 sm:mr-1.5" />
         {{ getStatusInfo(state.news.status).text }}
@@ -199,4 +199,3 @@ const formatDate = (timestamp: string) => {
   </div>
 </template>
 
-<style></style>

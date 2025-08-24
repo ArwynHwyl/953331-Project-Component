@@ -96,11 +96,11 @@ const formatRelativeTime = (timestamp: string): string => {
 </script>
 
 <template>
-  <div class="border-t border-gray-200 pt-6">
+  <div class=" border-gray-200 pt-6">
     <div class="flex">
-      <h2 class="text-2xl font-bold mb-4">Comments ({{ totalComment }})</h2>
+      <h2 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-2 p-2 border-b">Comments ({{ totalComment }})</h2>
     </div>
-    <div class="space-y-6">
+    <div class="space-y-4">
       <div
         v-for="comment in comments"
         :key="comment.id"
@@ -110,7 +110,7 @@ const formatRelativeTime = (timestamp: string): string => {
           <div class="flex-none">
             <div
               :style="{ backgroundImage: `linear-gradient(135deg,#7c3aed,#06b6d4)` }"
-              class="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+              class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm"
             >
               {{ (String(comment.userId).charAt(0) || 'U').toUpperCase() }}
             </div>
@@ -127,7 +127,7 @@ const formatRelativeTime = (timestamp: string): string => {
                     'bg-red-100 text-red-800': comment.vote === 'fake',
                     'bg-gray-100 text-gray-800': !comment.vote
                   }"
-                  class="text-xs px-2 py-0.5 rounded-full font-medium uppercase tracking-wide"
+                  class="text-xs px-2 py-0.5 rounded-full font-medium uppercase"
                 >
                   {{ comment.vote || 'unknown' }}
                 </span>
@@ -136,10 +136,11 @@ const formatRelativeTime = (timestamp: string): string => {
               </div>
 
               <div class="flex items-center gap-2">
+                <!-- desktop / tablet like button (hidden on small screens) -->
                 <button
                   @click="handleLike(comment.id)"
                   :aria-pressed="likedComments.has(comment.id)"
-                  class="flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                  class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
                   :class="likedComments.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
                 >
                   <ThumbsUp :size="14" :class="likedComments.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
@@ -148,7 +149,7 @@ const formatRelativeTime = (timestamp: string): string => {
               </div>
             </div>
 
-            <p class="mt-3 text-sm text-gray-700 leading-relaxed">{{ comment.text }}</p>
+            <p class="mt-3 text-sm text-gray-700 leading-normal">{{ comment.text }}</p>
 
             <div v-if="comment.imageUrl" class="mt-3">
               <img
@@ -159,8 +160,20 @@ const formatRelativeTime = (timestamp: string): string => {
               />
             </div>
 
-            <div class="mt-3 flex items-center gap-3 text-xs text-gray-500">
-              <span class="px-2 py-1 bg-gray-50 rounded-full">ID #{{ comment.id }}</span>
+            <!-- ID row: place like button on the right for small screens -->
+            <div class="mt-3 flex items-center justify-between gap-3 text-xs text-gray-500">
+              <span class="px-2 py-0.5 bg-gray-50 rounded-full">ID #{{ comment.id }}</span>
+
+              <!-- mobile like button (visible only on small screens) -->
+              <button
+                @click="handleLike(comment.id)"
+                :aria-pressed="likedComments.has(comment.id)"
+                class="flex sm:hidden items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                :class="likedComments.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
+              >
+                <ThumbsUp :size="14" :class="likedComments.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
+                <span>{{ getLikeCount(comment.id) }}</span>
+              </button>
             </div>
           </div>
         </div>
