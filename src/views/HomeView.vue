@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue';
 import NewsService from '@/services/NewsService';
-import type { NewsStatus, HomeNewsItem } from '@/types';
+import type { NewsStatus, HomeNewsItem, Comment, NewsItem } from '@/types';
 import { ref, onMounted } from 'vue';
 import NewsCard from '@/components/NewsCard.vue';
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next';
@@ -82,10 +82,10 @@ onMounted(() => {
         ...newsStore.newComments
       ];
 
-      allNews.value = initRes.data.map((item: any) => {
-        const newsComments = allComments.filter((c: any) => c.newsId === item.id);
-        const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
-        const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+      allNews.value = initRes.data.map((item: NewsItem) => {
+        const newsComments = allComments.filter((c: Comment) => c.newsId === item.id);
+        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length;
+        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length;
         const commentCount = newsComments.length;
         return {
           ...item,
@@ -97,10 +97,10 @@ onMounted(() => {
         };
       }) as HomeNewsItem[];
 
-      news.value = newsRes.data.map((item: any) => {
-        const newsComments = allComments.filter((c: any) => c.newsId === item.id);
-        const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
-        const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
+      news.value = newsRes.data.map((item: NewsItem) => {
+        const newsComments = allComments.filter((c: Comment) => c.newsId === item.id);
+        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length;
+        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length;
         const commentCount = newsComments.length;
         return {
           ...item,
@@ -114,29 +114,29 @@ onMounted(() => {
 
     totalNews.value = newsRes.headers['x-total-count'];
     allNewsCount.value = initRes.data.length;
-    allTotalVotes.value = commentsRes.data.filter((item: any) => item.vote === 'fake' || item.vote === 'trust').length;
-    allRealNewsCount.value = initRes.data.filter((newsItem: any) => {
-      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
-      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
-      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+    allTotalVotes.value = commentsRes.data.filter((item: Comment) => item.vote === 'fake' || item.vote === 'trust').length;
+    allRealNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
+      const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length;
       return trustVotes > fakeVotes;
     }).length;
-    allFakeNewsCount.value = initRes.data.filter((newsItem: any) => {
-      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
-      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
-      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+    allFakeNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
+      const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length;
       return trustVotes < fakeVotes;
     }).length;
-    allDisputedNewsCount.value = initRes.data.filter((newsItem: any) => {
-      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
-      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
-      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+    allDisputedNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
+      const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length;
       return trustVotes === fakeVotes && (trustVotes + fakeVotes) > 0;
     }).length;
-    allUnderReviewNewsCount.value = initRes.data.filter((newsItem: any) => {
-      const newsComments = commentsRes.data.filter((c: any) => c.newsId === newsItem.id);
-      const trustVotes = newsComments.filter((c: any) => c.vote === 'trust').length;
-      const fakeVotes = newsComments.filter((c: any) => c.vote === 'fake').length;
+    allUnderReviewNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
+      const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id);
+      const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length;
+      const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length;
       return (trustVotes + fakeVotes) === 0;
     }).length;
     } catch (error) {
