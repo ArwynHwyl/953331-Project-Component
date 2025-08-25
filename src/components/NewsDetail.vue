@@ -193,9 +193,5 @@ const formatDate = (timestamp: string) => {
     <div class="prose max-w-none text-gray-800 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed" style="white-space: pre-wrap;">{{ state.news.fullDetail }}</div>
 
   </div>
-  <div v-else class="text-center text-gray-500 mt-10">
-    <h2 class="text-2xl">Loading...</h2>
-    <p></p>
-  </div>
 </template>
 
