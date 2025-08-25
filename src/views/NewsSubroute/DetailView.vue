@@ -46,4 +46,3 @@ defineProps<{
 
   </main>
 </template>
-<style></style>
