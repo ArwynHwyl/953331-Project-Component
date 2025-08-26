@@ -159,6 +159,7 @@ onMounted(() => {
       <!-- Header -->
 
       <!-- Stats -->
+      <!-- I feel the disturbing in the force, I hereby declare this code to be DO NOT TOUCH -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
           <div class="text-3xl sm:text-4xl font-bold">{{ allTotalVotes }}</div>
@@ -187,7 +188,8 @@ onMounted(() => {
               ? 'bg-red-700 text-white'
               : 'bg-[#D9D9D9] text-black hover:bg-red-700',
           ]">
-            <User :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
+            <User :size="18" class="mr-2 group-hover:text-white transition-colors"
+              :class="filterType === 'all' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">All News</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600 transition-colors">
@@ -201,7 +203,8 @@ onMounted(() => {
               ? 'bg-red-700 text-white'
               : 'bg-[#D9D9D9] text-black hover:bg-red-700',
           ]">
-            <ShieldCheck :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
+            <ShieldCheck :size="18" class="mr-2 group-hover:text-white transition-colors"
+              :class="filterType === 'real' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Real</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
@@ -214,7 +217,8 @@ onMounted(() => {
               ? 'bg-red-700 text-white'
               : 'bg-[#D9D9D9] text-black hover:bg-red-700',
           ]">
-            <ShieldX :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
+            <ShieldX :size="18" class="mr-2 text-black group-hover:text-white transition-colors"
+              :class="filterType === 'fake' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Fake</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
@@ -227,7 +231,8 @@ onMounted(() => {
               ? 'bg-red-700 text-white'
               : 'bg-[#D9D9D9] text-black hover:bg-red-700',
           ]">
-            <AlertTriangle :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
+            <AlertTriangle :size="18" class="mr-2 text-black group-hover:text-white transition-colors"
+              :class="filterType === 'disputed' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Disputed</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
@@ -241,7 +246,8 @@ onMounted(() => {
               ? 'bg-red-700 text-white'
               : 'bg-[#D9D9D9] text-black hover:bg-red-700',
           ]">
-            <Clock :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
+            <Clock :size="18" class="mr-2 text-black group-hover:text-white transition-colors"
+              :class="filterType === 'under-review' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Under Review</span>
             <span
               class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
