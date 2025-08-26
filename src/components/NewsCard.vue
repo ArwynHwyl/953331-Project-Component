@@ -127,13 +127,13 @@ const getVerdictBarBgClass = (news: HomeNewsItem) => {
 
           <!-- Trust votes -->
           <div v-if="news.trustVotes >= news.fakeVotes || news.fakeVotes === 0"
-            class="bg-green-500 h-2.5 rounded-l-full absolute left-0 top-0"
+            class="bg-green-500 h-2.5 rounded-r-full absolute left-0 top-0"
             :style="{ width: `${news.totalVotesCount > 0 ? (news.trustVotes / news.totalVotesCount) * 100 : 0}%` }">
           </div>
 
           <!-- Fake votes -->
           <div v-if="news.fakeVotes >= news.trustVotes || news.trustVotes === 0"
-            class="bg-red-500 h-2.5 rounded-r-full absolute right-0 top-0"
+            class="bg-red-500 h-2.5 rounded-l-full absolute right-0 top-0"
             :style="{ width: `${news.totalVotesCount > 0 ? (news.fakeVotes / news.totalVotesCount) * 100 : 0}%` }">
           </div>
         </div>
