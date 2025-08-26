@@ -6,7 +6,7 @@ import { ref, onMounted } from 'vue'
 import NewsCard from '@/components/NewsCard.vue'
 import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next'
 
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useNewsStore } from '@/stores/news'
 
 const props = defineProps({
@@ -68,6 +68,19 @@ function getNewsStatus(fake: number, trust: number): NewsStatus {
   if (trustRatio <= 0.45) return 'fake'
   if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed'
   return 'disputed'
+}
+
+const router = useRouter()
+
+const setFilter = (newFilter: 'all' | 'real' | 'fake' | 'disputed' | 'under-review') => {
+  filterType.value = newFilter
+  router.push({
+    name: 'news-detail-view',
+    query: {
+      limit: limit.value,
+      page: 1
+    }
+  })
 }
 
 onMounted(() => {
@@ -173,104 +186,76 @@ onMounted(() => {
       </div>
 
       <!-- Filter -->
-      <div
-        class="flex items-center justify-between gap-2 mb-6 overflow-x-auto rounded-sm border border-gray-500"
-        style="background-color: #dedede"
-      >
+      <div class="flex items-center justify-between gap-2 mb-6 overflow-x-auto rounded-sm border border-gray-500"
+        style="background-color: #dedede">
         <div class="flex items-center gap-2 min-w-max ml-2 py-3">
           <!-- Search Icon -->
           <Search :size="18" class="text-gray-400 dark:text-gray-500 mr-2" />
           <!-- All News (Active) -->
-          <button
-            @click="filterType = 'all'"
-            :class="[
-              'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-              filterType === 'all'
-                ? 'bg-red-700 text-white'
-                : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-            ]"
-          >
+          <button @click="setFilter('all')" :class="[
+            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
+            filterType === 'all'
+              ? 'bg-red-700 text-white'
+              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
+          ]">
             <User :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
             <span class="group-hover:text-white">All News</span>
             <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600 transition-colors"
-            >
+              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600 transition-colors">
               {{ allNewsCount }}
             </span>
           </button>
           <!-- Real -->
-          <button
-            @click="filterType = 'real'"
-            :class="[
-              'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-              filterType === 'real'
-                ? 'bg-red-700 text-white'
-                : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-            ]"
-          >
-            <ShieldCheck
-              :size="18"
-              class="mr-2 text-black group-hover:text-white transition-colors"
-            />
+          <button @click="setFilter('real')" :class="[
+            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
+            filterType === 'real'
+              ? 'bg-red-700 text-white'
+              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
+          ]">
+            <ShieldCheck :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
             <span class="group-hover:text-white">Real</span>
             <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600"
-              >{{ allRealNewsCount }}</span
-            >
+              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
+                allRealNewsCount }}</span>
           </button>
           <!-- Fake -->
-          <button
-            @click="filterType = 'fake'"
-            :class="[
-              'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-              filterType === 'fake'
-                ? 'bg-red-700 text-white'
-                : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-            ]"
-          >
+          <button @click="setFilter('fake')" :class="[
+            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
+            filterType === 'fake'
+              ? 'bg-red-700 text-white'
+              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
+          ]">
             <ShieldX :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
             <span class="group-hover:text-white">Fake</span>
             <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600"
-              >{{ allFakeNewsCount }}</span
-            >
+              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
+                allFakeNewsCount }}</span>
           </button>
           <!-- Disputed -->
-          <button
-            @click="filterType = 'disputed'"
-            :class="[
-              'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-              filterType === 'disputed'
-                ? 'bg-red-700 text-white'
-                : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-            ]"
-          >
-            <AlertTriangle
-              :size="18"
-              class="mr-2 text-black group-hover:text-white transition-colors"
-            />
+          <button @click="setFilter('disputed')" :class="[
+            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
+            filterType === 'disputed'
+              ? 'bg-red-700 text-white'
+              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
+          ]">
+            <AlertTriangle :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
             <span class="group-hover:text-white">Disputed</span>
             <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600"
-            >
+              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
               {{ allDisputedNewsCount }}
             </span>
           </button>
           <!-- Under Review -->
-          <button
-            @click="filterType = 'under-review'"
-            :class="[
-              'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-              filterType === 'under-review'
-                ? 'bg-red-700 text-white'
-                : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-            ]"
-          >
+          <button @click="setFilter('under-review')" :class="[
+            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
+            filterType === 'under-review'
+              ? 'bg-red-700 text-white'
+              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
+          ]">
             <Clock :size="18" class="mr-2 text-black group-hover:text-white transition-colors" />
             <span class="group-hover:text-white">Under Review</span>
             <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600"
-            >
+              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
               {{ allUnderReviewNewsCount }}
             </span>
           </button>
@@ -278,11 +263,9 @@ onMounted(() => {
         <!-- Show x per page (Desktop only) -->
         <div class="hidden sm:flex items-center gap-1 ml-4 mr-4">
           <label for="per-page" class="text-sm text-gray-700">Show</label>
-          <select
-            id="per-page"
+          <select id="per-page"
             class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-            :value="limit"
-            @change="
+            :value="limit" @change="
               (e: Event) => {
                 const target = e.target as HTMLSelectElement | null
                 if (target) {
@@ -292,13 +275,8 @@ onMounted(() => {
                   })
                 }
               }
-            "
-          >
-            <option
-              v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)"
-              :key="n"
-              :value="n"
-            >
+            ">
+            <option v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)" :key="n" :value="n">
               {{ n }}
             </option>
           </select>
@@ -310,11 +288,9 @@ onMounted(() => {
       <div class="sm:hidden bg-[#DEDEDE] rounded-sm border border-gray-500 p-4 mb-6">
         <div class="flex items-center justify-center gap-2">
           <label for="per-page-mobile" class="text-sm text-gray-700">Show</label>
-          <select
-            id="per-page-mobile"
+          <select id="per-page-mobile"
             class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-            :value="limit"
-            @change="
+            :value="limit" @change="
               (e: Event) => {
                 const target = e.target as HTMLSelectElement | null
                 if (target) {
@@ -324,13 +300,8 @@ onMounted(() => {
                   })
                 }
               }
-            "
-          >
-            <option
-              v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)"
-              :key="n"
-              :value="n"
-            >
+            ">
+            <option v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)" :key="n" :value="n">
               {{ n }}
             </option>
           </select>
@@ -345,16 +316,11 @@ onMounted(() => {
 
       <!-- Pagination -->
       <div
-        class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center"
-      >
+        class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
         <div class="w-1/3 flex justify-start">
-          <RouterLink
-            v-if="page !== 1"
-            id="page-prev"
+          <RouterLink v-if="page !== 1" id="page-prev"
             class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-            :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }"
-            rel="prev"
-          >
+            :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }" rel="prev">
             &#60; Prev Page
           </RouterLink>
         </div>
@@ -366,13 +332,9 @@ onMounted(() => {
         </div>
 
         <div class="w-1/3 flex justify-end">
-          <RouterLink
-            v-if="page < Math.ceil(filteredAllNews.length / limit)"
-            id="page-next"
+          <RouterLink v-if="page < Math.ceil(filteredAllNews.length / limit)" id="page-next"
             class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-            :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }"
-            rel="next"
-          >
+            :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }" rel="next">
             Next Page &#62;
           </RouterLink>
         </div>
