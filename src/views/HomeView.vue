@@ -4,7 +4,7 @@ import NewsService from '@/services/NewsService'
 import type { NewsStatus, HomeNewsItem, Comment, NewsItem } from '@/types'
 import { ref, onMounted } from 'vue'
 import NewsCard from '@/components/NewsCard.vue'
-import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search } from 'lucide-vue-next'
+import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search, Vote, Newspaper } from 'lucide-vue-next'
 
 import { RouterLink, useRouter } from 'vue-router'
 import { useNewsStore } from '@/stores/news'
@@ -160,18 +160,65 @@ onMounted(() => {
 
       <!-- Stats -->
       <!-- I feel the disturbing in the force, I hereby declare this code to be DO NOT TOUCH -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
-          <div class="text-3xl sm:text-4xl font-bold">{{ allTotalVotes }}</div>
-          <div class="text-2xl sm:text-base font-bold">Total Votes</div>
+      <div class="mb-6">
+        <!-- Mobile: Horizontal scroll layout -->
+        <div class="flex gap-4 overflow-x-auto pb-2 sm:hidden">
+          <!-- Total Votes Card (Mobile) -->
+          <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md  p-2 text-center border border-gray-500 shadow-md">
+            <div class="text-2xl font-bold mb-2">{{ allTotalVotes }}</div>
+            <div class="flex items-center justify-center text-sm font-bold gap-4">
+              <Vote :size="14" />
+              <span>Votes</span>
+            </div>
+          </div>
+
+          <!-- News Count Card (Mobile) -->
+          <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md p-2 text-center border border-gray-500 shadow-md">
+            <div class="text-2xl font-bold mb-2">{{ allNewsCount }}</div>
+            <div class="flex items-center justify-center text-sm font-bold gap-2">
+              <Newspaper :size="14" />
+              <span>News</span>
+            </div>
+          </div>
+
+          <!-- Real News Card (Mobile) -->
+          <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md p-2 text-center border border-gray-500 shadow-md">
+            <div class="text-2xl font-bold mb-2">{{ allRealNewsCount }}</div>
+            <div class="flex items-center justify-center text-sm font-bold gap-2">
+              <ShieldCheck :size="14" />
+              <span>Real</span>
+            </div>
+          </div>
         </div>
-        <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
-          <div class="text-3xl sm:text-4xl font-bold">{{ allNewsCount }}</div>
-          <div class="text-2xl sm:text-base font-bold">News</div>
-        </div>
-        <div class="bg-[#312E2F] text-white rounded-md p-6 text-center">
-          <div class="text-3xl sm:text-4xl font-bold">{{ allRealNewsCount }}</div>
-          <div class="text-2xl sm:text-base font-bold">Real</div>
+
+        <!-- Desktop: Grid layout -->
+        <div class="hidden sm:grid sm:grid-cols-3 gap-4">
+          <!-- Total Votes Card (Desktop) -->
+          <div class="bg-[#312E2F] text-white rounded-md p-4 sm:p-2 text-center border border-gray-500 shadow-md">
+            <div class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{{ allTotalVotes }}</div>
+            <div class="flex items-center justify-center text-sm sm:text-base font-bold gap-2">
+              <Vote :size="16" />
+              <span>Total Votes</span>
+            </div>
+          </div>
+
+          <!-- News Count Card (Desktop) -->
+          <div class="bg-[#312E2F] text-white rounded-md p-4 sm:p-2 text-center border border-gray-500 shadow-md">
+            <div class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{{ allNewsCount }}</div>
+            <div class="flex items-center justify-center text-sm sm:text-base font-bold gap-2">
+              <Newspaper :size="16" />
+              <span>News</span>
+            </div>
+          </div>
+
+          <!-- Real News Card (Desktop) -->
+          <div class="bg-[#312E2F] text-white rounded-md p-4 sm:p-2 text-center border border-gray-500 shadow-md">
+            <div class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{{ allRealNewsCount }}</div>
+            <div class="flex items-center justify-center text-sm sm:text-base font-bold gap-2">
+              <ShieldCheck :size="16" />
+              <span>Real</span>
+            </div>
+          </div>
         </div>
       </div>
 
