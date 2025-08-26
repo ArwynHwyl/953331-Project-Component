@@ -19,6 +19,10 @@ export const useNewsStore = defineStore('news', {
       return (newsId: number): Comment[] => {
         return state.newComments.filter(comment => comment.newsId === newsId);
       }
+    },
+
+    getAllComments: (state) => {
+      return state.newComments
     }
   },
 

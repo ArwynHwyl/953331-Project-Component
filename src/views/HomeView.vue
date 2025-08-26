@@ -113,9 +113,13 @@ onMounted(() => {
 
       totalNews.value = newsRes.headers['x-total-count']
       allNewsCount.value = initRes.data.length
+
+      const newComments = newsStore.getAllComments;
+
       allTotalVotes.value = commentsRes.data.filter(
         (item: Comment) => item.vote === 'fake' || item.vote === 'trust',
-      ).length
+      ).length + newComments.length
+
       allRealNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
         const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id)
         const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
