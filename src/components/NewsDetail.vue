@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useNewsStore } from '@/stores/news';
-import type { DetailedNewsItem, NewsStatus, Comment } from '@/types';
+import type { DetailedNewsItem, NewsStatus, Comment, NewsItem } from '@/types';
 import NewsService from '@/services/NewsService';
 import {
   User, Calendar, ChevronUp, ChevronDown, ShieldCheck, ShieldX, AlertTriangle, Clock, MessageCircle, ThumbsUp
@@ -83,6 +83,16 @@ async function fetchNewsDetail() {
   }
 }
 
+const getVerdictBarBgClass = (news: DetailedNewsItem) => {
+  if (news.fakeVotes > news.trustVotes) {
+    return 'bg-green-200'; // Background shows non-dominant trust votes (green)
+  } else if (news.trustVotes > news.fakeVotes) {
+    return 'bg-red-200';   // Background shows non-dominant fake votes (red)
+  } else {
+    return 'bg-gray-200';  // Neutral when tied
+  }
+};
+
 onMounted(fetchNewsDetail);
 // Watch props.id instead of route.params.id
 watch([() => props.id, () => newsStore.newComments], fetchNewsDetail, { deep: true });
@@ -116,13 +126,42 @@ const formatRelativeTime = (timestamp: string): string => {
   return `${diffInDays} days ago`;
 };
 
+// const getStatusInfo = (status: NewsStatus) => {
+//   switch (status) {
+//     case 'trusted': return { text: 'Verified as Trust', icon: ShieldCheck, color: 'green' };
+//     case 'fake': return { text: 'Verified as Fake', icon: ShieldX, color: 'red' };
+//     case 'disputed': return { text: 'Disputed', icon: AlertTriangle, color: 'orange' };
+//     default: return { text: 'Under Review', icon: Clock, color: 'gray' };
+//   }
+// };
+
 // Helper for status display
 const getStatusInfo = (status: NewsStatus) => {
   switch (status) {
-    case 'trusted': return { text: 'Verified as Trust', icon: ShieldCheck, color: 'green' };
-    case 'fake': return { text: 'Verified as Fake', icon: ShieldX, color: 'red' };
-    case 'disputed': return { text: 'Disputed', icon: AlertTriangle, color: 'orange' };
-    default: return { text: 'Under Review', icon: Clock, color: 'gray' };
+    case 'trusted':
+      return {
+        text: 'Verified as Trust',
+        icon: ShieldCheck,
+        badgeClasses: 'bg-green-100 text-green-800',
+      };
+    case 'fake':
+      return {
+        text: 'Verified as Fake',
+        icon: ShieldX,
+        badgeClasses: 'bg-red-100 text-red-800',
+      };
+    case 'disputed':
+      return {
+        text: 'Disputed',
+        icon: AlertTriangle,
+        badgeClasses: 'bg-amber-100 text-amber-800',
+      };
+    default:
+      return {
+        text: 'Under Review',
+        icon: Clock,
+        badgeClasses: 'bg-gray-100 text-gray-800',
+      };
   }
 };
 
@@ -135,20 +174,22 @@ const formatDate = (timestamp: string) => {
 </script>
 
 <template>
-   <div v-if="state.news" class="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
+  <div v-if="state.news" class="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
     <!-- Header -->
     <img src="../../src/assets/forwhite.png" alt="Logo" class="h-10 sm:h-13 mb-3 sm:mb-4 mx-auto" />
     <div class="mb-4">
-      <h1 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-2">{{ state.news.title }}</h1>
+      <h1 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-2">{{
+        state.news.title }}</h1>
       <span class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium w-fit"
-        :class="`bg-${getStatusInfo(state.news.status).color}-100 text-${getStatusInfo(state.news.status).color}-800`">
-        <component :is="getStatusInfo(state.news.status).icon" :size="14" class="mr-1 sm:mr-1.5" />
+        :class="getStatusInfo(state.news.status).badgeClasses">
+        <component :is="getStatusInfo(state.news.status).icon" :size="16" class="mr-1.5" />
         {{ getStatusInfo(state.news.status).text }}
       </span>
     </div>
 
     <!-- Metadata -->
-    <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center text-xs sm:text-sm text-gray-500 mb-4 gap-1 sm:gap-x-4 sm:gap-y-1">
+    <div
+      class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center text-xs sm:text-sm text-gray-500 mb-4 gap-1 sm:gap-x-4 sm:gap-y-1">
       <span class="flex items-center">
         <User :size="12" class="mr-1 sm:mr-1.5" /> By {{ state.news.reporter }}
       </span>
@@ -173,25 +214,34 @@ const formatDate = (timestamp: string) => {
             <ChevronDown :size="14" class="text-red-600" /> Fake ({{ state.news.fakeVotes }})
           </button>
         </div>
-        <span class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">{{ state.news.totalVotesCount > 0 ? Math.round((state.news.trustVotes
-          / state.news.totalVotesCount) * 100) : 0 }}% believe this is trust</span>
+        <span class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">{{ state.news.totalVotesCount > 0 ?
+          Math.round((state.news.trustVotes
+            / state.news.totalVotesCount) * 100) : 0 }}% believe this is true</span>
       </div>
     </div>
 
     <!-- Progress Bar -->
-    <div class="w-full bg-red-200 rounded-full h-1.5 mb-4 sm:mb-6">
-      <div class="bg-green-500 h-1.5 rounded-full"
+    <div class="w-full rounded-full h-1.5 relative overflow-hidden mb-4 sm:mb-6"
+      :class="getVerdictBarBgClass(state.news)">
+      <div v-if="state.news.trustVotes >= state.news.fakeVotes || state.news.fakeVotes === 0"
+        class="bg-green-500 h-1.5 rounded-r-full absolute left-0 top-0"
         :style="{ width: `${state.news.totalVotesCount > 0 ? (state.news.trustVotes / state.news.totalVotesCount) * 100 : 0}%` }">
       </div>
+
+      <div v-if="state.news.fakeVotes >= state.news.trustVotes || state.news.trustVotes === 0"
+        class="bg-red-500 h-1.5 rounded-l-full absolute right-0 top-0"
+        :style="{ width: `${state.news.totalVotesCount > 0 ? (state.news.fakeVotes / state.news.totalVotesCount) * 100 : 0}%` }">
+      </div>
     </div>
+
 
     <!-- Main Image -->
     <img :src="state.news.imageUrl ?? ''" :alt="state.news.title ?? ''"
       class="w-full h-auto object-cover rounded-lg mb-4 sm:mb-6">
 
     <!-- Full Detail -->
-    <div class="prose max-w-none text-gray-800 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed" style="white-space: pre-wrap;">{{ state.news.fullDetail }}</div>
+    <div class="prose max-w-none text-gray-800 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed"
+      style="white-space: pre-wrap;">{{ state.news.fullDetail }}</div>
 
   </div>
 </template>
-

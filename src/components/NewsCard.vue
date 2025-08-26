@@ -57,15 +57,6 @@ const getVerdictBarBgClass = (news: HomeNewsItem) => {
     return 'bg-gray-200';  // Neutral when tied
   }
 };
-// const getVerdictBarBgClass = (news: HomeNewsItem) => {
-//   if (news.fakeVotes > news.trustVotes) {
-//     return 'bg-red-200';  // Red background when fake votes dominate
-//   } else if (news.trustVotes > news.fakeVotes) {
-//     return 'bg-green-200'; // Green background when trust votes dominate
-//   } else {
-//     return 'bg-gray-200';  // Neutral gray when tied
-//   }
-// };
 </script>
 
 <template>
