@@ -31,11 +31,25 @@ const page = computed(() => props.page)
 
 const allNewsCount = ref(0)
 const allTotalVotes = ref(0)
-const allRealNewsCount = ref(0)
 const totalNews = ref(0)
-const allFakeNewsCount = ref(0)
-const allDisputedNewsCount = ref(0)
-const allUnderReviewNewsCount = ref(0)
+
+const allRealNewsCount = computed(() => {
+  return allNews.value.filter((item) => item.trustVotes > item.fakeVotes).length
+})
+
+const allFakeNewsCount = computed(() => {
+  return allNews.value.filter((item) => item.trustVotes < item.fakeVotes).length
+})
+
+const allDisputedNewsCount = computed(() => {
+  return allNews.value.filter(
+    (item) => item.trustVotes === item.fakeVotes && item.trustVotes + item.fakeVotes > 0
+  ).length
+})
+
+const allUnderReviewNewsCount = computed(() => {
+  return allNews.value.filter((item) => item.trustVotes + item.fakeVotes === 0).length
+})
 
 const filteredAllNews = computed(() => {
   switch (filterType.value) {
@@ -132,31 +146,6 @@ onMounted(() => {
       allTotalVotes.value = commentsRes.data.filter(
         (item: Comment) => item.vote === 'fake' || item.vote === 'trust',
       ).length + newComments.length
-
-      allRealNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
-        const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id)
-        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
-        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length
-        return trustVotes > fakeVotes
-      }).length
-      allFakeNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
-        const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id)
-        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
-        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length
-        return trustVotes < fakeVotes
-      }).length
-      allDisputedNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
-        const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id)
-        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
-        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length
-        return trustVotes === fakeVotes && trustVotes + fakeVotes > 0
-      }).length
-      allUnderReviewNewsCount.value = initRes.data.filter((newsItem: NewsItem) => {
-        const newsComments = commentsRes.data.filter((c: Comment) => c.newsId === newsItem.id)
-        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
-        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length
-        return trustVotes + fakeVotes === 0
-      }).length
     } catch (error) {
       console.error('Error fetching news or comments:', error)
     }
