@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router'
 
 <template>
   <header
-    v-if="!$route.path.startsWith('/news/') || $route.path === '/news'"
+    v-if="!$route.path.startsWith('/news') || $route.path === '/news'"
     class="flex flex-col items-center py-2 px-10 w-full bg-[#c1c1c1] -mt-8"
   >
     <img

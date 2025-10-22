@@ -1,382 +1,317 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue'
-import NewsService from '@/services/NewsService'
-import type { NewsStatus, HomeNewsItem, Comment, NewsItem } from '@/types'
-import { ref, onMounted } from 'vue'
-import NewsCard from '@/components/NewsCard.vue'
-import { User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search, Vote, Newspaper } from 'lucide-vue-next'
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRouter, RouterLink } from 'vue-router';
+import NewsService from '@/services/NewsService';
+import { useNewsStore } from '@/stores/news';
+import type { NewsItem, HomeNewsItem, Comment, NewsStatus } from '@/types';
 
-import { RouterLink, useRouter } from 'vue-router'
-import { useNewsStore } from '@/stores/news'
+import NewsCard from '@/components/NewsCard.vue';
+import {
+  User, ShieldCheck, ShieldX, AlertTriangle, Clock, Search, Vote, Newspaper
+} from 'lucide-vue-next';
 
-const props = defineProps({
-  limit: {
-    type: Number,
-    required: true,
-  },
-  page: {
-    type: Number,
-    required: true,
-  },
-})
+/* ---------------- Props ---------------- */
+const props = defineProps<{ limit: number; page: number }>();
+const limit = computed(() => props.limit);
+const page = computed(() => props.page);
 
-const newsStore = useNewsStore()
+/* ---------------- Router / Store ---------------- */
+const router = useRouter();
+const newsStore = useNewsStore();
 
-const news = ref<HomeNewsItem[]>([])
-const allNews = ref<HomeNewsItem[]>([])
-const filterType = ref<'all' | 'real' | 'fake' | 'disputed' | 'under-review'>('all')
+/* ---------------- Constants ---------------- */
+const TRUST_THRESHOLD = 0.55;
+const FAKE_THRESHOLD  = 0.45;
 
-const limit = computed(() => props.limit)
-const page = computed(() => props.page)
+/* ---------------- Local state ---------------- */
+const allNews = ref<HomeNewsItem[]>([]);
+const pageNews = ref<HomeNewsItem[]>([]);
+const totalNews = ref(0);
+const allNewsCount = ref(0);
+const allTotalVotes = ref(0);
 
-const allNewsCount = ref(0)
-const allTotalVotes = ref(0)
-const totalNews = ref(0)
+/* ---------------- Filters ---------------- */
+type FilterKind = 'all' | 'real' | 'fake' | 'disputed' | 'under-review';
+const filterType = ref<FilterKind>('all');
 
-const allRealNewsCount = computed(() => {
-  return allNews.value.filter((item) => item.trustVotes > item.fakeVotes).length
-})
-
-const allFakeNewsCount = computed(() => {
-  return allNews.value.filter((item) => item.trustVotes < item.fakeVotes).length
-})
-
-const allDisputedNewsCount = computed(() => {
-  return allNews.value.filter(
-    (item) => item.trustVotes === item.fakeVotes && item.trustVotes + item.fakeVotes > 0
-  ).length
-})
-
-const allUnderReviewNewsCount = computed(() => {
-  return allNews.value.filter((item) => item.trustVotes + item.fakeVotes === 0).length
-})
-
-const filteredAllNews = computed(() => {
-  switch (filterType.value) {
-    case 'real':
-      return allNews.value.filter((item) => item.trustVotes > item.fakeVotes)
-    case 'fake':
-      return allNews.value.filter((item) => item.trustVotes < item.fakeVotes)
-    case 'disputed':
-      return allNews.value.filter(
-        (item) => item.trustVotes === item.fakeVotes && item.trustVotes + item.fakeVotes > 0,
-      )
-    case 'under-review':
-      return allNews.value.filter((item) => item.trustVotes + item.fakeVotes === 0)
-    case 'all':
-    default:
-      return allNews.value
-  }
-})
-
-const paginatedNews = computed(() => {
-  const start = (page.value - 1) * limit.value
-  return filteredAllNews.value.slice(start, start + limit.value)
-})
-
+/* ---------------- Helpers ---------------- */
 function getNewsStatus(fake: number, trust: number): NewsStatus {
-  const total = fake + trust
-  if (total === 0) return 'under-review'
-  const trustRatio = trust / total
-  if (trustRatio >= 0.55) return 'trusted'
-  if (trustRatio <= 0.45) return 'fake'
-  if (trustRatio > 0.45 && trustRatio < 0.55) return 'disputed'
-  return 'disputed'
+  const total = fake + trust;
+  if (total === 0) return 'under-review';
+  const ratio = trust / total;
+  if (ratio >= TRUST_THRESHOLD) return 'trusted';
+  if (ratio <= FAKE_THRESHOLD) return 'fake';
+  return 'disputed';
 }
 
-const router = useRouter()
-
-const setFilter = (newFilter: 'all' | 'real' | 'fake' | 'disputed' | 'under-review') => {
-  filterType.value = newFilter
-  router.push({
-    name: 'news-detail-view',
-    query: {
-      limit: limit.value,
-      page: 1
-    }
-  })
+function Home(item: NewsItem, comments: Comment[]): HomeNewsItem {
+  const newsComments = comments.filter(c => c.newsId === item.id);
+  const fakeVotes  = newsComments.filter(c => c.vote === 'fake').length;
+  const trustVotes = newsComments.filter(c => c.vote === 'trust').length;
+  const commentCount = newsComments.length;
+  return {
+    ...item,
+    fakeVotes,
+    trustVotes,
+    totalVotesCount: fakeVotes + trustVotes,
+    commentCount,
+    status: getNewsStatus(fakeVotes, trustVotes),
+  };
 }
 
-onMounted(() => {
-  watchEffect(async () => {
-    try {
-      const [newsRes, commentsRes, initRes] = await Promise.all([
-        NewsService.getNews(limit.value, page.value),
-        NewsService.getAllComments(),
-        NewsService.initNews(),
-      ])
+/* ---------------- Derived (counts, filters, pagination) ---------------- */
+const allRealNewsCount = computed(() => allNews.value.filter(news => news.trustVotes > news.fakeVotes).length);
+const allFakeNewsCount = computed(() => allNews.value.filter(news => news.trustVotes < news.fakeVotes).length);
+const allDisputedNewsCount = computed(() =>
+  allNews.value.filter(news => news.trustVotes === news.fakeVotes && news.totalVotesCount > 0).length
+);
+const allUnderReviewNewsCount = computed(() =>
+  allNews.value.filter(news => news.totalVotesCount === 0).length
+);
 
-      const allComments = [...commentsRes.data, ...newsStore.newComments]
+const filteredAllNews = computed<HomeNewsItem[]>(() => {
+  switch (filterType.value) {
+    case 'real':         return allNews.value.filter(news => news.trustVotes > news.fakeVotes);
+    case 'fake':         return allNews.value.filter(news => news.trustVotes < news.fakeVotes);
+    case 'disputed':     return allNews.value.filter(news => news.trustVotes === news.fakeVotes && news.totalVotesCount > 0);
+    case 'under-review': return allNews.value.filter(news => news.totalVotesCount === 0);
+    default:             return allNews.value;
+  }
+});
 
-      allNews.value = initRes.data.map((item: NewsItem) => {
-        const newsComments = allComments.filter((c: Comment) => c.newsId === item.id)
-        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length
-        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
-        const commentCount = newsComments.length
-        return {
-          ...item,
-          fakeVotes,
-          trustVotes,
-          totalVotesCount: fakeVotes + trustVotes,
-          commentCount,
-          status: getNewsStatus(fakeVotes, trustVotes),
-        }
-      }) as HomeNewsItem[]
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredAllNews.value.length / limit.value)));
+const paginatedNews = computed<HomeNewsItem[]>(() => {
+  const start = (page.value - 1) * limit.value;
+  return filteredAllNews.value.slice(start, start + limit.value);
+});
 
-      news.value = newsRes.data.map((item: NewsItem) => {
-        const newsComments = allComments.filter((c: Comment) => c.newsId === item.id)
-        const fakeVotes = newsComments.filter((c: Comment) => c.vote === 'fake').length
-        const trustVotes = newsComments.filter((c: Comment) => c.vote === 'trust').length
-        const commentCount = newsComments.length
-        return {
-          ...item,
-          fakeVotes,
-          trustVotes,
-          totalVotesCount: fakeVotes + trustVotes,
-          commentCount,
-          status: getNewsStatus(fakeVotes, trustVotes),
-        }
-      }) as HomeNewsItem[]
+/* ---------------- Router helpers ---------------- */
+function setFilter(newFilter: FilterKind) {
+  if (filterType.value === newFilter) return;
+  filterType.value = newFilter;
+  router.push({ name: 'news-detail-view', query: { limit: limit.value, page: 1 } });
+}
 
-      totalNews.value = newsRes.headers['x-total-count']
-      allNewsCount.value = initRes.data.length
+function onChangePerPage(e: Event) {
+  const target = e.target as HTMLSelectElement | null;
+  if (!target) return;
+  const nextLimit = Number(target.value);
+  router.push({ name: 'news-detail-view', query: { limit: nextLimit, page: 1 } });
+}
 
-      const newComments = newsStore.getAllComments;
+/* ---------------- Data loading (Promise-based) ---------------- */
+function loadAll(): Promise<void> {
+  return Promise.all([
+    NewsService.getNews(limit.value, page.value), // paginated slice from API
+    NewsService.getAllComments(),
+    NewsService.initNews(),                       // full news list (unpaginated)
+  ])
+    .then(([newsRes, commentsRes, initRes]) => {
+      // Merge API comments with in-memory new comments from store
+      const allComments: Comment[] = [
+        ...(Array.isArray(commentsRes.data) ? commentsRes.data : []),
+        ...newsStore.newComments,
+      ];
 
-      allTotalVotes.value = commentsRes.data.filter(
-        (item: Comment) => item.vote === 'fake' || item.vote === 'trust',
-      ).length + newComments.length
-    } catch (error) {
-      console.error('Error fetching news or comments:', error)
-    }
-  })
-})
+      // Full list (for filter & counts)
+      allNews.value = (initRes.data as NewsItem[]).map(item => Home(item, allComments));
+      allNewsCount.value = initRes.data.length;
+
+      // Page list (for the visible cards)
+      pageNews.value = (newsRes.data as NewsItem[]).map(item => Home(item, allComments));
+      totalNews.value = Number(newsRes.headers?.['x-total-count'] ?? pageNews.value.length);
+
+      // Global votes stat (existing + new)
+      const existingVotes = (commentsRes.data as Comment[]).filter(c => c.vote === 'fake' || c.vote === 'trust').length;
+      allTotalVotes.value = existingVotes + newsStore.getAllComments.length; // store accessor
+    })
+}
+
+/* ---------------- Lifecycle / Reactions ---------------- */
+onMounted(loadAll);
+// Re-load when pagination props or new store comments change
+watch(() => [limit.value, page.value, newsStore.newComments], () => { loadAll(); }, { deep: true });
 </script>
 
 <template>
   <main class="min-h-screen p-4 sm:p-6 lg:p-8" style="background-color: #d5d5d5">
     <div class="max-w-7xl mx-auto">
-      <!-- Header -->
-
       <!-- Stats -->
-      <!-- I feel the disturbing in the force, I hereby declare this code to be DO NOT TOUCH -->
       <div class="mb-6">
-        <!-- Mobile: Horizontal scroll layout -->
+        <!-- Mobile -->
         <div class="flex gap-4 overflow-x-auto pb-2 sm:hidden">
-          <!-- Total Votes Card (Mobile) -->
-          <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md  p-2 text-center border border-gray-500 shadow-md">
+          <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md p-2 text-center border border-gray-500 shadow-md">
             <div class="text-2xl font-bold mb-2">{{ allTotalVotes }}</div>
             <div class="flex items-center justify-center text-sm font-bold gap-4">
-              <Vote :size="14" />
-              <span>Votes</span>
+              <Vote :size="14" /><span>Votes</span>
             </div>
           </div>
 
-          <!-- News Count Card (Mobile) -->
           <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md p-2 text-center border border-gray-500 shadow-md">
             <div class="text-2xl font-bold mb-2">{{ allNewsCount }}</div>
             <div class="flex items-center justify-center text-sm font-bold gap-2">
-              <Newspaper :size="14" />
-              <span>News</span>
+              <Newspaper :size="14" /><span>News</span>
             </div>
           </div>
 
-          <!-- Real News Card (Mobile) -->
           <div class="flex-shrink-0 w-30 bg-[#312E2F] text-white rounded-md p-2 text-center border border-gray-500 shadow-md">
             <div class="text-2xl font-bold mb-2">{{ allRealNewsCount }}</div>
             <div class="flex items-center justify-center text-sm font-bold gap-2">
-              <ShieldCheck :size="14" />
-              <span>Real</span>
+              <ShieldCheck :size="14" /><span>Real</span>
             </div>
           </div>
         </div>
 
-        <!-- Desktop: Grid layout -->
+        <!-- Desktop -->
         <div class="hidden sm:grid sm:grid-cols-3 gap-4">
-          <!-- Total Votes Card (Desktop) -->
           <div class="bg-[#312E2F] text-white rounded-md p-4 sm:p-2 text-center border border-gray-500 shadow-md">
             <div class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{{ allTotalVotes }}</div>
             <div class="flex items-center justify-center text-sm sm:text-base font-bold gap-2">
-              <Vote :size="16" />
-              <span>Total Votes</span>
+              <Vote :size="16" /><span>Total Votes</span>
             </div>
           </div>
 
-          <!-- News Count Card (Desktop) -->
           <div class="bg-[#312E2F] text-white rounded-md p-4 sm:p-2 text-center border border-gray-500 shadow-md">
             <div class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{{ allNewsCount }}</div>
             <div class="flex items-center justify-center text-sm sm:text-base font-bold gap-2">
-              <Newspaper :size="16" />
-              <span>News</span>
+              <Newspaper :size="16" /><span>News</span>
             </div>
           </div>
 
-          <!-- Real News Card (Desktop) -->
           <div class="bg-[#312E2F] text-white rounded-md p-4 sm:p-2 text-center border border-gray-500 shadow-md">
             <div class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{{ allRealNewsCount }}</div>
             <div class="flex items-center justify-center text-sm sm:text-base font-bold gap-2">
-              <ShieldCheck :size="16" />
-              <span>Real</span>
+              <ShieldCheck :size="16" /><span>Real</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Filter -->
-      <div class="flex items-center justify-between gap-2 mb-6 overflow-x-auto rounded-sm border border-gray-500"
-        style="background-color: #dedede">
+      <!-- Filter + Per Page -->
+      <div class="flex items-center justify-between gap-2 mb-6 overflow-x-auto rounded-sm border border-gray-500" style="background-color: #dedede">
         <div class="flex items-center gap-2 min-w-max ml-2 py-3">
-          <!-- Search Icon -->
-          <Search :size="18" class="text-gray-400 dark:text-gray-500 mr-2" />
-          <!-- All News (Active) -->
-          <button @click="setFilter('all')" :class="[
-            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-            filterType === 'all'
-              ? 'bg-red-700 text-white'
-              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-          ]">
-            <User :size="18" class="mr-2 group-hover:text-white transition-colors"
-              :class="filterType === 'all' ? 'text-white' : 'text-black'" />
+          <Search :size="18" class="text-gray-400 mr-2" />
+
+          <button
+            @click="setFilter('all')"
+            :class="['group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 whitespace-nowrap rounded transition-colors',
+                     filterType === 'all' ? 'bg-red-700 text-white' : 'bg-[#D9D9D9] text-black hover:bg-red-700']">
+            <User :size="18" class="mr-2 group-hover:text-white" :class="filterType === 'all' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">All News</span>
-            <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600 transition-colors">
+            <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
               {{ allNewsCount }}
             </span>
           </button>
-          <!-- Real -->
-          <button @click="setFilter('real')" :class="[
-            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-            filterType === 'real'
-              ? 'bg-red-700 text-white'
-              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-          ]">
-            <ShieldCheck :size="18" class="mr-2 group-hover:text-white transition-colors"
-              :class="filterType === 'real' ? 'text-white' : 'text-black'" />
+
+          <button
+            @click="setFilter('real')"
+            :class="['group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 whitespace-nowrap rounded transition-colors',
+                     filterType === 'real' ? 'bg-red-700 text-white' : 'bg-[#D9D9D9] text-black hover:bg-red-700']">
+            <ShieldCheck :size="18" class="mr-2 group-hover:text-white" :class="filterType === 'real' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Real</span>
-            <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
-                allRealNewsCount }}</span>
+            <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
+              {{ allRealNewsCount }}
+            </span>
           </button>
-          <!-- Fake -->
-          <button @click="setFilter('fake')" :class="[
-            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-            filterType === 'fake'
-              ? 'bg-red-700 text-white'
-              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-          ]">
-            <ShieldX :size="18" class="mr-2 text-black group-hover:text-white transition-colors"
-              :class="filterType === 'fake' ? 'text-white' : 'text-black'" />
+
+          <button
+            @click="setFilter('fake')"
+            :class="['group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 whitespace-nowrap rounded transition-colors',
+                     filterType === 'fake' ? 'bg-red-700 text-white' : 'bg-[#D9D9D9] text-black hover:bg-red-700']">
+            <ShieldX :size="18" class="mr-2 group-hover:text-white" :class="filterType === 'fake' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Fake</span>
-            <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">{{
-                allFakeNewsCount }}</span>
+            <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
+              {{ allFakeNewsCount }}
+            </span>
           </button>
-          <!-- Disputed -->
-          <button @click="setFilter('disputed')" :class="[
-            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-            filterType === 'disputed'
-              ? 'bg-red-700 text-white'
-              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-          ]">
-            <AlertTriangle :size="18" class="mr-2 text-black group-hover:text-white transition-colors"
-              :class="filterType === 'disputed' ? 'text-white' : 'text-black'" />
+
+          <button
+            @click="setFilter('disputed')"
+            :class="['group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 whitespace-nowrap rounded transition-colors',
+                     filterType === 'disputed' ? 'bg-red-700 text-white' : 'bg-[#D9D9D9] text-black hover:bg-red-700']">
+            <AlertTriangle :size="18" class="mr-2 group-hover:text-white" :class="filterType === 'disputed' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Disputed</span>
-            <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
+            <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
               {{ allDisputedNewsCount }}
             </span>
           </button>
-          <!-- Under Review -->
-          <button @click="setFilter('under-review')" :class="[
-            'group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 transition-colors whitespace-nowrap rounded',
-            filterType === 'under-review'
-              ? 'bg-red-700 text-white'
-              : 'bg-[#D9D9D9] text-black hover:bg-red-700',
-          ]">
-            <Clock :size="18" class="mr-2 text-black group-hover:text-white transition-colors"
-              :class="filterType === 'under-review' ? 'text-white' : 'text-black'" />
+
+          <button
+            @click="setFilter('under-review')"
+            :class="['group flex items-center px-4 py-2 text-sm font-semibold border border-gray-500 whitespace-nowrap rounded transition-colors',
+                     filterType === 'under-review' ? 'bg-red-700 text-white' : 'bg-[#D9D9D9] text-black hover:bg-red-700']">
+            <Clock :size="18" class="mr-2 group-hover:text-white" :class="filterType === 'under-review' ? 'text-white' : 'text-black'" />
             <span class="group-hover:text-white">Under Review</span>
-            <span
-              class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
+            <span class="ml-2 bg-white text-black text-xs px-2 py-0.5 border rounded-sm group-hover:bg-white group-hover:text-red-600">
               {{ allUnderReviewNewsCount }}
             </span>
           </button>
         </div>
-        <!-- Show x per page (Desktop only) -->
+
+        <!-- Per page (Desktop) -->
         <div class="hidden sm:flex items-center gap-1 ml-4 mr-4">
           <label for="per-page" class="text-sm text-gray-700">Show</label>
-          <select id="per-page"
+          <select
+            id="per-page"
             class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-            :value="limit" @change="
-              (e: Event) => {
-                const target = e.target as HTMLSelectElement | null
-                if (target) {
-                  $router.push({
-                    name: 'news-detail-view',
-                    query: { limit: Number(target.value), page: 1 },
-                  })
-                }
-              }
-            ">
-            <option v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)" :key="n" :value="n">
-              {{ n }}
-            </option>
+            :value="limit"
+            @change="onChangePerPage"
+          >
+            <option v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)" :key="n" :value="n">{{ n }}</option>
           </select>
           <span class="text-sm text-gray-700">per page</span>
         </div>
       </div>
 
-      <!-- Per page selector for mobile -->
+      <!-- Per page (Mobile) -->
       <div class="sm:hidden bg-[#DEDEDE] rounded-sm border border-gray-500 p-4 mb-6">
         <div class="flex items-center justify-center gap-2">
           <label for="per-page-mobile" class="text-sm text-gray-700">Show</label>
-          <select id="per-page-mobile"
+          <select
+            id="per-page-mobile"
             class="border border-gray-400 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-            :value="limit" @change="
-              (e: Event) => {
-                const target = e.target as HTMLSelectElement | null
-                if (target) {
-                  $router.push({
-                    name: 'news-detail-view',
-                    query: { limit: Number(target.value), page: 1 },
-                  })
-                }
-              }
-            ">
-            <option v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)" :key="n" :value="n">
-              {{ n }}
-            </option>
+            :value="limit"
+            @change="onChangePerPage"
+          >
+            <option v-for="n in Array.from({ length: allNewsCount }, (_, i) => i + 1)" :key="n" :value="n">{{ n }}</option>
           </select>
           <span class="text-sm text-gray-700">per page</span>
         </div>
       </div>
 
-      <!-- Card Item-->
+      <!-- Cards (use paginatedNews derived from filteredAllNews) -->
       <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md">
         <NewsCard v-for="item in paginatedNews" :key="item.id" :news="item" :comments="[]" />
       </div>
 
       <!-- Pagination -->
-      <div
-        class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
+      <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 shadow-md flex justify-between items-center">
         <div class="w-1/3 flex justify-start">
-          <RouterLink v-if="page !== 1" id="page-prev"
+          <RouterLink
+            v-if="page > 1"
+            id="page-prev"
             class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-            :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }" rel="prev">
+            :to="{ name: 'news-detail-view', query: { limit, page: page - 1 } }"
+            rel="prev"
+          >
             &#60; Prev Page
           </RouterLink>
         </div>
 
         <div class="w-1/3 flex justify-center">
           <span class="whitespace-nowrap">
-            Page {{ page }} of {{ Math.ceil(filteredAllNews.length / limit) || 1 }}
+            Page {{ page }} of {{ totalPages }}
           </span>
         </div>
 
         <div class="w-1/3 flex justify-end">
-          <RouterLink v-if="page < Math.ceil(filteredAllNews.length / limit)" id="page-next"
+          <RouterLink
+            v-if="page < totalPages"
+            id="page-next"
             class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-            :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }" rel="next">
+            :to="{ name: 'news-detail-view', query: { limit, page: page + 1 } }"
+            rel="next"
+          >
             Next Page &#62;
           </RouterLink>
         </div>

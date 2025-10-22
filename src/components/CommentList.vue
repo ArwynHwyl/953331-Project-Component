@@ -1,152 +1,160 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed, watchEffect } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useNewsStore } from '@/stores/news';
 import NewsService from '@/services/NewsService';
 import type { Comment } from '@/types';
 import { ThumbsUp } from 'lucide-vue-next';
-import { useRoute } from 'vue-router';
 
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true
-  },
-})
+/* -------------------- Props -------------------- */
+const props = defineProps<{ id: number }>();
 
+/* -------------------- Router -------------------- */
 const route = useRoute();
+const toInt = (v: unknown, fallback: number) => {
+  const number = Number(Array.isArray(v) ? v[0] : v);
+  return Number.isFinite(number) && number > 0 ? Math.floor(number) : fallback;
+};
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 5;
 
-const page = computed(() => Number(route.query.page) || 1);
-const limit = computed(() => Number(route.query.limit) || 2);
+const page = computed(() => toInt(route.query.page, DEFAULT_PAGE));
+const limit = computed(() => toInt(route.query.limit, DEFAULT_LIMIT));
 
-
-const newsId = computed(() => props.id)
-
-const totalComment = ref(0)
-
-const hasNextPage = computed(() => {
-  const totalPages = Math.ceil(totalComment.value / limit.value)
-  return page.value < totalPages
-})
-
+/* -------------------- Store -------------------- */
 const newsStore = useNewsStore();
-const likedComments = ref<Set<number>>(new Set());
-const comments = ref<Comment[]>([]);
-const allApiComments = ref<Comment[]>([]);
 
-async function fetchAllApiComments() {
-  try {
-    const res = await NewsService.getCommentsByNewsId(newsId.value);
-    allApiComments.value = Array.isArray(res.data) ? res.data : [];
-  } catch (e) {
-    console.error('Failed to fetch all API comments', e);
-    allApiComments.value = [];
-  }
+/* -------------------- Mutable state (raw API only) -------------------- */
+const loading = ref<boolean>(true);
+const error = ref<string>('');
+const apiComments = ref<Comment[]>([]);  // fetched once per newsId
+
+/* -------------------- Derived state -------------------- */
+const injectedComments = computed<Comment[]>(
+  () => newsStore.getNewCommentsByNewsId(props.id) as Comment[]
+);
+
+const allComments = computed<Comment[]>(() =>
+  [...apiComments.value, ...injectedComments.value].sort(
+    (a, b) => +new Date(b.timestamp) - +new Date(a.timestamp)
+  )
+);
+
+const totalComments = computed(() => allComments.value.length);
+const totalPages = computed(() => Math.max(1, Math.ceil(totalComments.value / limit.value)));
+const safePage = computed(() => Math.min(Math.max(page.value, 1), totalPages.value));
+
+const pageSlice = computed<[number, number]>(() => {
+  const start = (safePage.value - 1) * limit.value;
+  return [start, start + limit.value];
+});
+
+const pagedComments = computed<Comment[]>(() => {
+  const [start, end] = pageSlice.value;
+  return allComments.value.slice(start, end);
+});
+
+const hasPrevPage = computed(() => safePage.value > 1);
+const hasNextPage = computed(() => safePage.value < totalPages.value);
+
+/* -------------------- Likes (UI-only) -------------------- */
+const liked = ref<Set<number>>(new Set());
+const toggleLike = (id: number) => (liked.value.has(id) ? liked.value.delete(id) : liked.value.add(id));
+const likeCountFor = (id: number) => {
+  const base = (id * 3 + 5) % 25;
+  return liked.value.has(id) ? base + 1 : base;
+};
+
+/* -------------------- Utils -------------------- */
+const relativeTime = (ts: string) => {
+  const s = Math.max(0, Math.floor((Date.now() - +new Date(ts)) / 1000));
+  if (s < 60) return `${s} seconds ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} minutes ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} hours ago`;
+  return `${Math.floor(h / 24)} days ago`;
+};
+
+/* -------------------- Data loading -------------------- */
+function loadComments(newsId: number): Promise<void> {
+  loading.value = true;
+  error.value = '';
+  apiComments.value = [];
+  return NewsService.getCommentsByNewsId(newsId)
+    .then((res) => {
+      apiComments.value = Array.isArray(res?.data) ? (res.data as Comment[]) : [];
+    })
+    .catch(() => {
+      error.value = 'Failed to load comments.';
+      apiComments.value = [];
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
 
-async function fetchComments() {
-  try {
-    if (allApiComments.value.length === 0) {
-      await fetchAllApiComments();
-    }
-
-    const newComments = newsStore.getNewCommentsByNewsId(newsId.value);
-
-    const merged = [...allApiComments.value, ...newComments];
-    merged.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-
-    const start = (page.value - 1) * limit.value;
-    const end = start + limit.value;
-    comments.value = merged.slice(start, end);
-
-    totalComment.value = allApiComments.value.length + newComments.length;
-  } catch (e) {
-    comments.value = [];
-  }
-}
-
-onMounted(fetchComments);
-watch([newsId, page, limit], () => { fetchComments() });
-
-const handleLike = (commentId: number) => {
-  if (likedComments.value.has(commentId)) {
-    likedComments.value.delete(commentId);
-  } else {
-    likedComments.value.add(commentId);
-  }
-};
-
-const getLikeCount = (commentId: number) => {
-  const baseLikes = (commentId * 3 + 5) % 25;
-  return likedComments.value.has(commentId) ? baseLikes + 1 : baseLikes;
-};
-
-const formatRelativeTime = (timestamp: string): string => {
-  const now = new Date();
-  const past = new Date(timestamp);
-  const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
-
-  if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours} hours ago`;
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays} days ago`;
-};
+onMounted(() => loadComments(props.id));
+watch(() => props.id, (nid) => loadComments(nid));
+/* No watch on page/limit/store: all derived via computed */
 </script>
 
 <template>
-  <div class=" border-gray-200 pt-6">
+  <div class="pt-6">
     <div class="flex">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-2 p-2 border-b">Comments ({{ totalComment }})</h2>
+      <h2 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-2 p-2 border-b">
+        Comments ({{ totalComments }})
+      </h2>
     </div>
+
+    <!-- List -->
     <div class="space-y-4">
       <div
-        v-for="comment in comments"
+        v-for="comment in pagedComments"
         :key="comment.id"
         class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200 overflow-hidden"
       >
         <div class="flex items-start gap-4">
+          <!-- Avatar -->
           <div class="flex-none">
             <div
-              :style="{ backgroundImage: `linear-gradient(135deg,#7c3aed,#06b6d4)` }"
+              :style="{ backgroundImage: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }"
               class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm"
             >
               {{ (String(comment.userId).charAt(0) || 'U').toUpperCase() }}
             </div>
           </div>
 
+          <!-- Body -->
           <div class="flex-1">
             <div class="flex items-center justify-between">
               <div class="flex items-baseline gap-2">
                 <div class="text-sm font-semibold text-gray-900">{{ comment.userId }}</div>
 
                 <span
+                  class="text-xs px-2 py-0.5 rounded-full font-medium uppercase"
                   :class="{
                     'bg-green-100 text-green-800': comment.vote === 'trust',
                     'bg-red-100 text-red-800': comment.vote === 'fake',
                     'bg-gray-100 text-gray-800': !comment.vote
                   }"
-                  class="text-xs px-2 py-0.5 rounded-full font-medium uppercase"
                 >
                   {{ comment.vote || 'unknown' }}
                 </span>
 
-                <span class="text-xs text-gray-400 ml-2">{{ formatRelativeTime(comment.timestamp) }}</span>
+                <span class="text-xs text-gray-400 ml-2">{{ relativeTime(comment.timestamp) }}</span>
               </div>
 
-              <div class="flex items-center gap-2">
-                <!-- desktop / tablet like button (hidden on small screens) -->
-                <button
-                  @click="handleLike(comment.id)"
-                  :aria-pressed="likedComments.has(comment.id)"
-                  class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                  :class="likedComments.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
-                >
-                  <ThumbsUp :size="14" :class="likedComments.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
-                  <span>{{ getLikeCount(comment.id) }}</span>
-                </button>
-              </div>
+              <!-- Like (desktop/tablet) -->
+              <button
+                @click="toggleLike(comment.id)"
+                :aria-pressed="liked.has(comment.id)"
+                class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                :class="liked.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
+              >
+                <ThumbsUp :size="14" :class="liked.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
+                <span>{{ likeCountFor(comment.id) }}</span>
+              </button>
             </div>
 
             <p class="mt-3 text-sm text-gray-700 leading-normal">{{ comment.text }}</p>
@@ -160,48 +168,56 @@ const formatRelativeTime = (timestamp: string): string => {
               />
             </div>
 
-            <!-- ID row: place like button on the right for small screens -->
+            <!-- Footer row -->
             <div class="mt-3 flex items-center justify-between gap-3 text-xs text-gray-500">
               <span class="px-2 py-0.5 bg-gray-50 rounded-full">ID #{{ comment.id }}</span>
 
-              <!-- mobile like button (visible only on small screens) -->
+              <!-- Like (mobile) -->
               <button
-                @click="handleLike(comment.id)"
-                :aria-pressed="likedComments.has(comment.id)"
+                @click="toggleLike(comment.id)"
+                :aria-pressed="liked.has(comment.id)"
                 class="flex sm:hidden items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                :class="likedComments.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
+                :class="liked.has(comment.id) ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-600'"
               >
-                <ThumbsUp :size="14" :class="likedComments.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
-                <span>{{ getLikeCount(comment.id) }}</span>
+                <ThumbsUp :size="14" :class="liked.has(comment.id) ? 'text-indigo-600' : 'text-gray-600'" />
+                <span>{{ likeCountFor(comment.id) }}</span>
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div
-      class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 my-6 shadow-md flex justify-between items-center">
-      <div class="w-1/3 flex justify-start">
-        <RouterLink v-if="page !== 1" id="page-prev"
-          class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-          :to="{ query: { limit, page: page - 1 } }" rel="prev">
-          &#60; Prev Page
-        </RouterLink>
-      </div>
+      <!-- Pagination -->
+      <div class="bg-[#E5E5E5] rounded-lg border-[#B0B0B0] border-2 p-6 mb-6 my-6 shadow-md flex justify-between items-center">
+        <div class="w-1/3 flex justify-start">
+          <RouterLink
+            v-if="hasPrevPage"
+            id="page-prev"
+            class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
+            :to="{ query: { limit, page: safePage - 1 } }"
+            rel="prev"
+          >
+            &#60; Prev Page
+          </RouterLink>
+        </div>
 
-      <div class="w-1/3 flex justify-center">
-        <span class="whitespace-nowrap">
-          Page {{ page }} of {{ Math.ceil(totalComment / limit) || 1 }}
-        </span>
-      </div>
+        <div class="w-1/3 flex justify-center">
+          <span class="whitespace-nowrap">
+            Page {{ safePage }} of {{ totalPages }}
+          </span>
+        </div>
 
-      <div class="w-1/3 flex justify-end">
-        <RouterLink v-if="hasNextPage" id="page-next"
-          class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
-          :to="{ query: { limit, page: page + 1 } }" rel="next">
-          Next Page &#62;
-        </RouterLink>
+        <div class="w-1/3 flex justify-end">
+          <RouterLink
+            v-if="hasNextPage"
+            id="page-next"
+            class="no-underline text-gray-700 hover:text-gray-900 whitespace-nowrap"
+            :to="{ query: { limit, page: safePage + 1 } }"
+            rel="next"
+          >
+            Next Page &#62;
+          </RouterLink>
+        </div>
       </div>
     </div>
   </div>

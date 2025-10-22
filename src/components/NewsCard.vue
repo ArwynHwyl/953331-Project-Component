@@ -1,7 +1,5 @@
 <script setup lang="ts">
-// import { ref } from 'vue';
-import type { NewsItem, NewsStatus } from '@/types';
-import type { HomeNewsItem, DetailedNewsItem } from '@/types';
+import type { HomeNewsItem, DetailedNewsItem, NewsStatus } from '@/types';
 import {
   Scale, User, Calendar, MessageCircle, ChevronUp, ChevronDown,
   ShieldCheck, ShieldX, AlertTriangle, Clock

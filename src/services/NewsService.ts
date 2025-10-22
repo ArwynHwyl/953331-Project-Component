@@ -11,7 +11,7 @@ export default {
   initNews(){
     return apiClient.get('/news');
   },
-  getNews(perPage: Number, page: Number) {
+  getNews(perPage: number, page: number) {
     return apiClient.get('/news?_limit=' + perPage + '&_page=' + page);
   },
   getNewsById(newsId: number) {
