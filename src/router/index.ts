@@ -2,9 +2,9 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
 import HomeView from '../views/HomeView.vue'
-import DetailView from '@/views/NewsSubroute/DetailView.vue'
-import CommentView from '@/views/NewsSubroute/CommentView.vue'
-import VoteformView from '@/views/NewsSubroute/VoteformView.vue'
+import DetailView from '@/views/DetailView.vue'
+import CommentView from '@/views/CommentView.vue'
+import VoteformView from '@/views/VoteformView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

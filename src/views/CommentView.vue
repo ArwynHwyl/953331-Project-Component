@@ -1,0 +1,18 @@
+<script setup lang="ts">
+import CommentList from '@/components/CommentList.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const id = Number(route.params.id);
+const limit = Number(route.params.limit) || 2;
+const page = Number(route.params.page) || 1;
+</script>
+
+<template>
+  <main class=" bg-gray-50 p-4 sm:p-8 rounded-md ">
+    <div class="max-w-3xl mx-auto">
+      <CommentList :id="id" :limit="limit" :page="page" />
+    </div>
+  </main>
+</template>
